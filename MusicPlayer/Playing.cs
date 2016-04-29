@@ -44,10 +44,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		{
 			if (WasapiOut.IsSupportedOnCurrentPlatform)
 				return new WasapiOut();
-			else
-				return new DirectSoundOut();
+			return new DirectSoundOut();
 		}
-
-		
 	}
 }

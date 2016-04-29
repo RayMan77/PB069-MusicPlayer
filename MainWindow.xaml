@@ -139,6 +139,7 @@
 		</Menu>
 		<CheckBox x:Name="checkBox" Content="Shuffle" HorizontalAlignment="Left" Margin="10,8,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFACACAC"/>
 		<CheckBox x:Name="checkBox1" Content="Track repeat" HorizontalAlignment="Left" Margin="10,24,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFB6B3B3"/>
+		<Button x:Name="loadPlaylistBtn" Content="LoadPlaylist" HorizontalAlignment="Left" Margin="11,3,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" Click="loadPlaylistBtn_Click"/>
 
 
 

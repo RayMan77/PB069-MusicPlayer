@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using PB_069_MusicPlayer.MusicPlayer;
+using PlaylistParsers;
 
 namespace PB_069_MusicPlayer
 {
@@ -33,19 +34,24 @@ namespace PB_069_MusicPlayer
 			InitializeComponent();
 			_equalizerWindow= new EqualizerWindow();
 			_playlistWindow = new PlaylistWindow();
+			StabilizeWindows();
 
 
 		}
 
+
+
+		private void StabilizeWindows()
+		{
+			_playlistWindow.Left = Application.Current.MainWindow.Left;
+			_playlistWindow.Top = Application.Current.MainWindow.Top + Application.Current.MainWindow.Height;
+			_equalizerWindow.Left = Application.Current.MainWindow.Left + Application.Current.MainWindow.Width - 5;
+			_equalizerWindow.Top = Application.Current.MainWindow.Top;
+		}
+
 		private void PlaylistBtn_Click(object sender, RoutedEventArgs e)
 		{
-			_playlistWindow.Left = Application.Current.MainWindow.Left ;
-			_playlistWindow.Top = Application.Current.MainWindow.Top + Application.Current.MainWindow.Height ;
-
-
-
-
-
+			StabilizeWindows();
 			if (!_pLactive)
 			{
 				_playlistWindow.Show();
@@ -66,6 +72,7 @@ namespace PB_069_MusicPlayer
 
 		private void EQBtn_Click(object sender, RoutedEventArgs e)
 		{
+			StabilizeWindows();
 			if (!_eQactive)
 			{
 				_equalizerWindow.Show();
@@ -81,13 +88,7 @@ namespace PB_069_MusicPlayer
 		private void Window_LocationChanged(object sender, EventArgs e)
 		{
 
-
-			_equalizerWindow.Left = Application.Current.MainWindow.Left + Application.Current.MainWindow.Width-5;
-			_equalizerWindow.Top = Application.Current.MainWindow.Top;
-
-
-			_playlistWindow.Left = Application.Current.MainWindow.Left;
-			_playlistWindow.Top = Application.Current.MainWindow.Top + Application.Current.MainWindow.Height ;
+			StabilizeWindows();
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)
@@ -105,17 +106,41 @@ namespace PB_069_MusicPlayer
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ChangedButton == MouseButton.Left)
-				this.DragMove();
+				DragMove();
 		}
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
 			var openFileD = new OpenFileDialog();
 			openFileD.ShowDialog();
-			
+			if (openFileD.FileName.Equals(""))
+			{
+				return;
+			}
 			var pl = new Playing(openFileD.FileName);
 			var thread = new Thread(new ThreadStart(pl.Play));
 			thread.Start();
+		}
+
+		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
+		{
+			
+			var openFileD = new OpenFileDialog();
+			openFileD.ShowDialog();
+			if (openFileD.FileName.Equals(""))
+			{
+				return;
+			}
+			var parser = new M3UParser(openFileD.FileName);
+			
+			foreach (var path in parser.Songs)
+			{
+				_playlistWindow.listBox.Items.Add(path.SongName);
+			}
+
+			_pLactive = true;
+			_playlistWindow.Show();
+			StabilizeWindows();
 		}
 	}
 }
