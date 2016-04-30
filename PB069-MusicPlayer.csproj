@@ -86,7 +86,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MusicPlayer\Playing.cs" />
+    <Compile Include="MusicPlayer\PlayManager.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="PlaylistWindow.xaml.cs">
       <DependentUpon>PlaylistWindow.xaml</DependentUpon>

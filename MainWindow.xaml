@@ -107,7 +107,7 @@
 
 
 		<Button x:Name="StopBtn"  Style="{StaticResource BtnTemplate}" Margin="77,14,277,10" 
-				Grid.Row="3" Background="Black" Content="{StaticResource Stop}">
+				Grid.Row="3" Background="Black" Content="{StaticResource Stop}" Click="StopBtn_Click">
 			
 		</Button>
 

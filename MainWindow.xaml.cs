@@ -29,18 +29,20 @@ namespace PB_069_MusicPlayer
 		private readonly PlaylistWindow _playlistWindow;
 		private bool _pLactive;
 		private bool _eQactive;
-		private Playing pl;
+		private PlayManager pl;
+		private List<Playlist> ListOfPlaylists;
 
 
-		private List<Playlist> ListOfPlaylists { get; }
+
 		private Playlist currentlyPlayingPlaylist;
-		private int currentlyPlayingSong;
+		
 
 		private Thread thread;
 
 
 		public MainWindow()
 		{
+			
 			InitializeComponent();
 			_equalizerWindow= new EqualizerWindow();
 			_playlistWindow = new PlaylistWindow();
@@ -48,20 +50,33 @@ namespace PB_069_MusicPlayer
 
 			ListOfPlaylists = new List<Playlist> {currentlyPlayingPlaylist};
 			StabilizeWindows();
-			pl = new Playing(currentlyPlayingPlaylist);
-
+			pl = new PlayManager(currentlyPlayingPlaylist);
+			thread = new Thread(pl.Play);
 
 		}
 
-		#region Window Closed
-				private void Window_Closed(object sender, EventArgs e)
-				{
-					Application.Current.Shutdown();
-				}
-				private void Button_Click(object sender, RoutedEventArgs e)
-				{
-					Application.Current.Shutdown();
-				}
+		#region Window Closing disposing
+
+		private void quitDispoze()
+		{
+			if (!thread.IsAlive) return;
+			pl.Dispose();
+			thread.Abort();
+		}
+		private void Window_Closed(object sender, EventArgs e)
+		{
+					
+			Application.Current.Shutdown();
+			quitDispoze();
+			
+		}
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+					
+			Application.Current.Shutdown();
+			quitDispoze();
+			
+		}
 		#endregion
 		#region WindowStab
 
@@ -128,14 +143,19 @@ namespace PB_069_MusicPlayer
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
-			
-			var kappa = currentlyPlayingPlaylist.PlayList.ToArray();
-			pl.Song = kappa[currentlyPlayingSong].SongPath;
-			thread = new Thread(pl.Play);
-			thread.Start();
-			
-			
-			
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			if (!thread.IsAlive)
+			{
+				thread.Start();
+			}
+			else if (!pl.IsPlaying())
+			{
+				pl.UnPause();
+			}
+			else 
+			{
+				pl.RestartSong();
+			}
 		}
 
 		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
@@ -169,6 +189,24 @@ namespace PB_069_MusicPlayer
 			_pLactive = true;
 			_playlistWindow.Show();
 			StabilizeWindows();
+		}
+
+		private void StopBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			if (!thread.IsAlive)
+			{
+				thread.Start();
+			} else if (pl.IsPlaying())
+			{
+				pl.Pause();
+			}
+			else if(!pl.IsPlaying())
+			{
+				pl.UnPause();
+			}
+			
+			
 		}
 	}
 }
