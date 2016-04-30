@@ -139,8 +139,9 @@ namespace PB_069_MusicPlayer
 			if (e.ChangedButton == MouseButton.Left)
 				Application.Current.MainWindow.DragMove();
 		}
-#endregion
+		#endregion
 
+		#region baseBtns (play/stop) etc
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
 			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
@@ -157,6 +158,44 @@ namespace PB_069_MusicPlayer
 				pl.RestartSong();
 			}
 		}
+
+		private void StopBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			if (!thread.IsAlive)
+			{
+				thread.Start();
+			}
+			else if (pl.IsPlaying())
+			{
+				pl.Pause();
+			}
+			else if (!pl.IsPlaying())
+			{
+				pl.UnPause();
+			}
+
+		}
+
+		private void PrevSongStopBtnBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			
+			pl.PreviousSong();
+		}
+		private void NextSongStopBtnBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			pl.NextSong();
+		}
+
+		private void StopPlaybackBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+
+		}
+
+#endregion
 
 		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
 		{
@@ -191,22 +230,6 @@ namespace PB_069_MusicPlayer
 			StabilizeWindows();
 		}
 
-		private void StopBtn_Click(object sender, RoutedEventArgs e)
-		{
-			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
-			if (!thread.IsAlive)
-			{
-				thread.Start();
-			} else if (pl.IsPlaying())
-			{
-				pl.Pause();
-			}
-			else if(!pl.IsPlaying())
-			{
-				pl.UnPause();
-			}
-			
-			
-		}
+		
 	}
 }
