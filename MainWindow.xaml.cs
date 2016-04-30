@@ -27,19 +27,43 @@ namespace PB_069_MusicPlayer
 
 		private readonly EqualizerWindow _equalizerWindow;
 		private readonly PlaylistWindow _playlistWindow;
-		private bool _pLactive = false;
-		private bool _eQactive = false;
+		private bool _pLactive;
+		private bool _eQactive;
+		private Playing pl;
+
+
+		private List<Playlist> ListOfPlaylists { get; }
+		private Playlist currentlyPlayingPlaylist;
+		private int currentlyPlayingSong;
+
+		private Thread thread;
+
+
 		public MainWindow()
 		{
 			InitializeComponent();
 			_equalizerWindow= new EqualizerWindow();
 			_playlistWindow = new PlaylistWindow();
+			currentlyPlayingPlaylist =new Playlist(new List<Song>());
+
+			ListOfPlaylists = new List<Playlist> {currentlyPlayingPlaylist};
 			StabilizeWindows();
+			pl = new Playing(currentlyPlayingPlaylist);
 
 
 		}
 
-
+		#region Window Closed
+				private void Window_Closed(object sender, EventArgs e)
+				{
+					Application.Current.Shutdown();
+				}
+				private void Button_Click(object sender, RoutedEventArgs e)
+				{
+					Application.Current.Shutdown();
+				}
+		#endregion
+		#region WindowStab
 
 		private void StabilizeWindows()
 		{
@@ -65,11 +89,6 @@ namespace PB_069_MusicPlayer
 			
 		}
 
-		private void Window_Closed(object sender, EventArgs e)
-		{
-			Application.Current.Shutdown();
-		}
-
 		private void EQBtn_Click(object sender, RoutedEventArgs e)
 		{
 			StabilizeWindows();
@@ -91,11 +110,8 @@ namespace PB_069_MusicPlayer
 			StabilizeWindows();
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			Application.Current.Shutdown();
-		}
-
+		#endregion
+		#region WindowMove
 		private void menu_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ChangedButton == MouseButton.Left)
@@ -106,20 +122,20 @@ namespace PB_069_MusicPlayer
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
 			if (e.ChangedButton == MouseButton.Left)
-				DragMove();
+				Application.Current.MainWindow.DragMove();
 		}
+#endregion
 
 		private void PlayBtn_Click(object sender, RoutedEventArgs e)
 		{
-			var openFileD = new OpenFileDialog();
-			openFileD.ShowDialog();
-			if (openFileD.FileName.Equals(""))
-			{
-				return;
-			}
-			var pl = new Playing(openFileD.FileName);
-			var thread = new Thread(new ThreadStart(pl.Play));
+			
+			var kappa = currentlyPlayingPlaylist.PlayList.ToArray();
+			pl.Song = kappa[currentlyPlayingSong].SongPath;
+			thread = new Thread(pl.Play);
 			thread.Start();
+			
+			
+			
 		}
 
 		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
@@ -132,11 +148,23 @@ namespace PB_069_MusicPlayer
 				return;
 			}
 			var parser = new M3UParser(openFileD.FileName);
-			
+
+			int counter = 1;
 			foreach (var path in parser.Songs)
 			{
-				_playlistWindow.listBox.Items.Add(path.SongName);
+				_playlistWindow.listBox.Items.Add(counter+". "+path.SongName);
+				counter++;
 			}
+
+//			if (currentlyPlayingPlaylist.PlayList.Count==0)
+//			{
+				currentlyPlayingPlaylist.PlayList.AddRange(parser.Songs);
+//
+//			}
+//			else
+//			{
+//				ListOfPlaylists.Add(new Playlist(parser.Songs));
+//			}
 
 			_pLactive = true;
 			_playlistWindow.Show();

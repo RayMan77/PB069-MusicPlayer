@@ -13,7 +13,7 @@
 			<RowDefinition Height="66*"/>
 			<RowDefinition Height="7*"/>
 		</Grid.RowDefinitions>
-		<ListBox x:Name="listBox" HorizontalAlignment="Left" Height="239" Margin="10,16,0,0" VerticalAlignment="Top" Width="357" Background="#FF383837"/>
+		<ListBox x:Name="listBox" HorizontalAlignment="Left" Height="239" Margin="10,16,0,0" VerticalAlignment="Top" Width="357" Background="#FF383837" Foreground="White" MouseDoubleClick="listBox_MouseDoubleClick"/>
 		<Menu x:Name="menu" HorizontalAlignment="Left" Height="24" Margin="10,266,0,0" VerticalAlignment="Top" Width="357" Grid.RowSpan="2">
 			<ComboBoxItem/>
 		</Menu>
