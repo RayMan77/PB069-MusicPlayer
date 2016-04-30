@@ -94,7 +94,7 @@
 
 
 		<Button x:Name="StopPlaybackBtn"  Style="{StaticResource BtnTemplate}" Margin="124,16,231,10" 
-				Grid.Row="3" Background="Black">
+				Grid.Row="3" Background="Black" Click="StopPlaybackBtn_Click">
 			<Button.Content>
 				<Rectangle Width="10" Height="10">
 					<Rectangle.Fill>
@@ -113,12 +113,12 @@
 
 
 		<Button x:Name="NextSongStopBtnBtn"  Style="{StaticResource BtnTemplate}" Margin="240,14,115,10" 
-				Grid.Row="3" Background="Black" Content="{StaticResource Next}">
+				Grid.Row="3" Background="Black" Content="{StaticResource Next}" Click="NextSongStopBtnBtn_Click">
 
 		</Button>
 
 		<Button x:Name="PrevSongStopBtnBtn"  Style="{StaticResource BtnTemplate}" Margin="193,14,162,10" 
-				Grid.Row="3" Background="Black" Content="{StaticResource Prev}">
+				Grid.Row="3" Background="Black" Content="{StaticResource Prev}" Click="PrevSongStopBtnBtn_Click">
 
 		</Button>
 
