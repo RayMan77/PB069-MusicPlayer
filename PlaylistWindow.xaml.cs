@@ -14,14 +14,20 @@ using System.Windows.Shapes;
 
 namespace PB_069_MusicPlayer
 {
-    /// <summary>
-    /// Interaction logic for PlaylistWindow.xaml
-    /// </summary>
-    public partial class PlaylistWindow : Window
-    {
-        public PlaylistWindow()
-        {
-            InitializeComponent();
-        }
-    }
+	/// <summary>
+	/// Interaction logic for PlaylistWindow.xaml
+	/// </summary>
+	public partial class PlaylistWindow : Window
+	{
+		public PlaylistWindow()
+		{
+			InitializeComponent();
+		}
+
+		private void listBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			Console.WriteLine(listBox.SelectedItems[0].ToString().Split('.').First());
+			
+		}
+	}
 }

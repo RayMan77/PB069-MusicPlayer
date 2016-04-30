@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using CSCore;
 using CSCore.Codecs;
 using CSCore.Codecs.WAV;
@@ -9,35 +10,43 @@ namespace PB_069_MusicPlayer.MusicPlayer
 {
 	public class Playing 
 	{
-		
+		public Playlist Playlist { get; set; }
+		public string Song { get; set; }
 
-		public Playing(string song)
+
+		public Playing(Playlist playlist)
 		{
-			Song = song;
+			Playlist = playlist;
 		}
 
-		public string Song { get; set; }
+		
 
 
 		public void Play()
 		{
 
-			using (IWaveSource soundSource = CodecFactory.Instance.GetCodec(Song))
+			foreach (var song in Playlist.PlayList)
 			{
-				//SoundOut implementation which plays the sound
-				using (ISoundOut soundOut = GetSoundOut())
+
+				Console.WriteLine("playing "+song.SongName);
+				using (IWaveSource soundSource = CodecFactory.Instance.GetCodec(song.SongPath))
 				{
-					//Tell the SoundOut which sound it has to play
-					soundOut.Initialize(soundSource);
-					//Play the sound
-					soundOut.Play();
+					using (ISoundOut soundOut = GetSoundOut())
+					{
+						//Tell the SoundOut which sound it has to play
+						soundOut.Initialize(soundSource);
 
-					Thread.Sleep(20000);
+						soundOut.Play();
 
-					//Stop the playback
-					//soundOut.Stop();
+						Thread.Sleep((int)soundSource.Length + 1);
+
+
+						//soundOut.Stop();
+					}
+
 				}
 			}
+			
 
 		}
 		private ISoundOut GetSoundOut()
@@ -45,6 +54,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			if (WasapiOut.IsSupportedOnCurrentPlatform)
 				return new WasapiOut();
 			return new DirectSoundOut();
+		}
+
+		public void ChangeSong(int song)
+		{
+			
 		}
 	}
 }
