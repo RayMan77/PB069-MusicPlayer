@@ -19,6 +19,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private bool restartSong;
 		private bool nextSong;
 		private bool prevSong;
+		private bool paused;
 
 
 		public Playlist Playlist { get; set; }
@@ -66,7 +67,12 @@ namespace PB_069_MusicPlayer.MusicPlayer
 						soundOut.Initialize(soundSource);
 
 						soundOut.Play();
-
+						if (paused)
+						{
+							paused = false;
+							soundOut.Pause();
+						}
+						
 
 
 
@@ -76,7 +82,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 							Console.WriteLine(CurrPlaying);
 							if (restartSong)
 							{
-								CurrPlaying--;
+							
 								restartSong = false;
 								break;
 								
@@ -112,6 +118,10 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void NextSong()
 		{
+			if (soundOut.PlaybackState == PlaybackState.Paused)
+			{
+				paused = true;
+			}
 			nextSong = true;
 			if (CurrPlaying + 1 == Playlist.PlayList.Count)
 			{
@@ -123,6 +133,10 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void PreviousSong()
 		{
+			if (soundOut.PlaybackState == PlaybackState.Paused)
+			{
+				paused = true;
+			}
 			prevSong = true;
 			if (CurrPlaying - 1 < 0)
 			{
@@ -145,6 +159,13 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			soundOut.Pause();
 		}
 
+		public void RestartAndPause()
+		{
+			CurrPlaying--;
+			restartSong = true;
+			paused = true;
+		}
+
 		public void UnPause()
 		{
 			soundOut.Resume();
@@ -163,8 +184,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void RestartSong()
 		{
+			CurrPlaying--;
 			restartSong = true;
 		}
+
+		
 
 		public enum RepeatOptions
 		{

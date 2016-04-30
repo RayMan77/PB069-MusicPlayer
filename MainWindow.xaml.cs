@@ -52,7 +52,7 @@ namespace PB_069_MusicPlayer
 			StabilizeWindows();
 			pl = new PlayManager(currentlyPlayingPlaylist);
 			thread = new Thread(pl.Play);
-
+			
 		}
 
 		#region Window Closing disposing
@@ -192,6 +192,9 @@ namespace PB_069_MusicPlayer
 		private void StopPlaybackBtn_Click(object sender, RoutedEventArgs e)
 		{
 			if (currentlyPlayingPlaylist.PlayList.Count <= 0) return;
+			pl.RestartAndPause();
+			
+			
 
 		}
 
