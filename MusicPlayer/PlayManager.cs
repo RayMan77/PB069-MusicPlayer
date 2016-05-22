@@ -67,6 +67,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		
 		private bool paused;
 
+		public TimeSpan Time { get; set; }
+
 
 		public float Volume { get; set; }
 
@@ -117,6 +119,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 						
 						while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
 						{
+							
 							soundOut.Volume = Volume;
 							if (songChange )
 							{
