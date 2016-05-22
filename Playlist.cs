@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Documents;
 using PlaylistParsers;
 
@@ -8,30 +9,73 @@ namespace PB_069_MusicPlayer
 {
 	public class Playlist
 	{
-		public List<Song> PlayList { get; }
+		#region properties/variables
+
 
 		
 
+		
 
-		public Song NowPlaying { get; set; }
+		public List<Song> SongList { get; }
 
-		public Playlist(List<Song> playList, Song nowPlaying)
+		
+
+//
+//		public int NowPlayingNum
+//		{
+//			get
+//			{
+//				return _nowPlayingNum;
+//			}
+//			set
+//			{
+//				
+//				_nowPlayingNum = value;
+//
+//				if (_nowPlayingNum >= SongList.Count)
+//				{
+//					_nowPlayingNum = SongList.Count-1;
+//				}
+//				if (_nowPlayingNum < 0)
+//				{
+//					_nowPlayingNum = 0;
+//				}
+//				NowPlayingSong = SongList[_nowPlayingNum];
+//			}
+//		}
+
+		#endregion
+
+//		public void SetNowPlaying(int num)
+//		{
+//			_nowPlayingNum += num;
+//
+//			if (_nowPlayingNum >= SongList.Count)
+//			{
+//				_nowPlayingNum = 0;
+//			}
+//			if (_nowPlayingNum < 0)
+//			{
+//				_nowPlayingNum = SongList.Count-2 ;
+//			}
+//			Console.WriteLine(_nowPlayingNum);
+//			NowPlayingSong = SongList[_nowPlayingNum];
+//		}
+
+
+
+		#region constructors
+		public Playlist(List<Song> songList)
 		{
-			PlayList = playList;
-			
-			NowPlaying = nowPlaying;
-			
+			SongList = songList;
 		}
+		
+		public Playlist():this(new List<Song>()){}
 
-		public Playlist(List<Song> playList)
-		{
-			PlayList = playList;
-			
-			
-		}
+		#endregion
 
-
-		private static void Shuffle<T>(IList<T> list)
+		#region shuffle
+		private static void ShufflePL<T>(IList<T> list)
 		{
 			int n = list.Count;
 			var rnd = new Random();
@@ -44,5 +88,10 @@ namespace PB_069_MusicPlayer
 				list[n] = value;
 			}
 		}
+#endregion
+
+
+		
+
 	}
 }

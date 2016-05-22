@@ -7,14 +7,23 @@
 		mc:Ignorable="d"
 		Title="MyMusicPlayer" Height="210" Width="385" ResizeMode="NoResize" Background="#FF383837" Closed="Window_Closed" LocationChanged="Window_LocationChanged" 
 		WindowStartupLocation="CenterScreen"
-		WindowStyle="None" MouseDown="Window_MouseDown">
+		WindowStyle="None" MouseDown="Window_MouseDown" Activated="Window_Activated" Deactivated="Window_Deactivated"  >
 	<Window.Resources>
-		<Image x:Key="Stop" Source="images/Stop.png"/>
-		<Image x:Key="Next" Source="images/Next.png"/>
-		<Image x:Key="Prev" Source="images/prevt.png"/>
+		<Image x:Key="Stop" Source="/images/Stop.png"/>
+		<Image x:Key="Next" Source="/images/Next.png"/>
+		<Image x:Key="Prev" Source="/images/prevt.png"/>
 
-
-
+		<Style TargetType="Button" >
+			<Setter Property="Background" Value="#737373"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderThickness" Value= "2" />
+			<Setter Property="BorderBrush" Value="#474747"/>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter Property="Background" Value="Black"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 
 		<Style x:Key ="PlayButtonTemplate" TargetType="{x:Type Button}">
 			<Setter Property ="Foreground" Value ="Black"/>
@@ -41,9 +50,6 @@
 			</Setter>
 		</Style>
 
-
-
-
 		<Style x:Key ="BtnTemplate" TargetType="{x:Type Button}">
 			<Setter Property ="Foreground" Value ="Black"/>
 			<Setter Property ="FontWeight" Value ="Bold"/>
@@ -69,6 +75,21 @@
 			</Setter>
 		</Style>
 
+		<Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
+			<Setter Property="OverridesDefaultStyle" Value="True"/>
+			<Setter Property="SnapsToDevicePixels" Value="True"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ContextMenu}">
+						<Border Background="#CD222120"  BorderBrush="White" BorderThickness="1"  >
+							<StackPanel ClipToBounds="True" Orientation="Vertical" IsItemsHost="True" Margin="5,4,5,4"/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		
 
 	</Window.Resources>
 
@@ -101,14 +122,14 @@
 						<SolidColorBrush Color="#FF2C2C2C" />
 					</Rectangle.Fill>
 				</Rectangle>
-				
+
 			</Button.Content>
 		</Button>
 
 
 		<Button x:Name="StopBtn"  Style="{StaticResource BtnTemplate}" Margin="77,14,277,10" 
 				Grid.Row="3" Background="Black" Content="{StaticResource Stop}" Click="StopBtn_Click">
-			
+
 		</Button>
 
 
@@ -126,12 +147,15 @@
 
 
 
-		<Button x:Name="EQBtn" Content="EQ" HorizontalAlignment="Left" Margin="340,16,0,0" VerticalAlignment="Top" Width="25" RenderTransformOrigin="3.539,1.244" Height="20" Grid.Row="1" Click="EQBtn_Click"/>
-		<Button x:Name="PlaylistBtn" Content="PlayList" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
-		<Slider x:Name="slider" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="355" Height="18" Grid.Row="2"/>
-		<Slider x:Name="slider1" HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="172" Grid.Row="4" Height="18"/>
-		<Label x:Name="label" Content="NowPlaying" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="355" Height="26" Grid.Row="2" Foreground="White"/>
-		<Label x:Name="label1" Content="00:00" Margin="156,3,0,0" VerticalAlignment="Top" Width="95" Height="35" FontSize="20" HorizontalAlignment="Left" Foreground="#FFACACAC" Grid.Row="1"/>
+		<Button x:Name="EQBtn" Content="EQ" HorizontalAlignment="Left" Margin="340,16,0,0" VerticalAlignment="Top" Width="25" RenderTransformOrigin="3.539,1.244" Height="20" Grid.Row="1" Click="EQBtn_Click"
+				/>
+		
+		<Button x:Name="PlaylistBtn" Content="Playlist" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
+
+		<Slider x:Name="progressTracker" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2"/>
+		<Slider x:Name="volumeTracker" HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="182" Grid.Row="4" Height="18"/>
+		<Label x:Name="nowPlayingLabel" Content="NowPlaying" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="355" Height="26" Grid.Row="2" Foreground="White"/>
+		<Label x:Name="timeLabel" Content="00:00" Margin="156,3,0,0" VerticalAlignment="Top" Width="95" Height="35" FontSize="20" HorizontalAlignment="Left" Foreground="#FFACACAC" Grid.Row="1"/>
 
 		<Menu x:Name="menu" Height="22" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF747474" MouseDown="menu_MouseDown" Margin="266,0,0,0">
 			<Button Height="22" Width="35" RenderTransformOrigin="2.172,0.508" Content="Exit" Click="Button_Click" Background="#FFAAAAAA"/>
@@ -139,8 +163,24 @@
 		</Menu>
 		<CheckBox x:Name="checkBox" Content="Shuffle" HorizontalAlignment="Left" Margin="10,8,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFACACAC"/>
 		<CheckBox x:Name="checkBox1" Content="Track repeat" HorizontalAlignment="Left" Margin="10,24,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFB6B3B3"/>
-		<Button x:Name="loadPlaylistBtn" Content="LoadPlaylist" HorizontalAlignment="Left" Margin="11,3,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" Click="loadPlaylistBtn_Click"/>
 
+
+
+		<Grid>
+			<Button  Height="23" HorizontalAlignment="Left"  Name="loadBtn" VerticalAlignment="Top" Width="33" Click="rollDown" Margin="12,178,0,-179"  Content="Load">
+<!--				<Button.Content>-->
+<!--					<Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="10" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>-->
+<!--				</Button.Content>-->
+				<Button.ContextMenu>
+					<ContextMenu >
+						<MenuItem Foreground="Snow" Header="Playlist" Click="loadPlaylistBtn_Click"/>
+						<MenuItem Foreground="Snow" Header="Songs" Click="loadSongs_OnClick"/>
+						<MenuItem Foreground="Snow" Header="Folder" Click="loadFolder_OnClick"/>
+						
+					</ContextMenu>
+				</Button.ContextMenu>
+			</Button>
+		</Grid>
 
 
 
