@@ -33,9 +33,10 @@ namespace PB_069_MusicPlayer
 		private void listBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			if (playlistBox.SelectedItems.Count <= 0) return;
+			if (!pl.IsInitialized()) return;
 
 			pl.ChangeSong(playlistBox.SelectedIndex-1);
-			Console.WriteLine(playlistBox.SelectedItems[0].ToString().Split('.').First());
+			Console.WriteLine(playlistBox.SelectedIndex - 1);
 		}
 
 		
