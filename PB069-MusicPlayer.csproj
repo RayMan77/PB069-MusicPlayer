@@ -35,11 +35,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSCore">
-      <HintPath>..\..\CSCore.1.0.0.0\lib\net35-client\CSCore.dll</HintPath>
+    <Reference Include="CSCore, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dlls\CSCore.1.0.0.0\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
-    <Reference Include="PlaylistParsers">
-      <HintPath>..\..\..\..\..\..\MyProjects\PlaylistParsers\PlaylistParsers\bin\Debug\PlaylistParsers.dll</HintPath>
+    <Reference Include="PlaylistParsers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dlls\PlaylistParsers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
