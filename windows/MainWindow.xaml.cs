@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Win32;
 using PB_069_MusicPlayer.MusicPlayer;
@@ -27,10 +28,10 @@ namespace PB_069_MusicPlayer
 
 		public MainWindow()
 		{
-			
-			InitializeComponent();
 			pl = new PlayManager();
 			thread = new Thread(pl.Play);
+			InitializeComponent();
+			
 			equalizerWindow = new EqualizerWindow();
 			playlistWindow = new PlaylistWindow(pl);
 			
@@ -253,7 +254,6 @@ namespace PB_069_MusicPlayer
 
 		}
 
-
 		#region loadSongs
 
 		/// <summary>
@@ -342,6 +342,16 @@ namespace PB_069_MusicPlayer
 		}
 
 		#endregion
+
+		private void VolumeTracker_DragCompleted(object sender, DragCompletedEventArgs e)
+		{
+			pl.Volume = (float) (volumeTracker.Value/10);
+		}
+
+		private void volumeTracker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			pl.Volume = (float)(volumeTracker.Value / 10);
+		}
 	}
 	
 

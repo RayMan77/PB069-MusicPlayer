@@ -36,7 +36,6 @@ namespace PB_069_MusicPlayer
 			if (!pl.IsInitialized()) return;
 
 			pl.ChangeSong(playlistBox.SelectedIndex-1);
-			Console.WriteLine(playlistBox.SelectedIndex - 1);
 		}
 
 		
