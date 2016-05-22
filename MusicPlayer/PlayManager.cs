@@ -16,19 +16,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 {
 	public class PlayManager
 	{
-
-		#region properties/variables
-
-		#region options/core
-		private enum RepeatOptions
-		{
-			NoRepeat, RepeatThisPlaylist, GoToNextPlaylist
-		}
-
-		private bool Shuffle { get; set; }
-
-		private RepeatOptions Repeat { get; set; }
-
+		#region library staff
 
 		private IWaveSource soundSource;
 
@@ -40,7 +28,25 @@ namespace PB_069_MusicPlayer.MusicPlayer
 				return new WasapiOut();
 			return new DirectSoundOut();
 		}
+
 		#endregion
+
+		#region properties/variables
+
+		
+
+		private enum RepeatOptions
+		{
+			NoRepeat, RepeatThisPlaylist, GoToNextPlaylist
+		}
+
+		private bool Shuffle { get; set; }
+
+		private RepeatOptions Repeat { get; set; }
+
+
+		
+		
 
 
 
@@ -143,6 +149,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		#endregion
 
 		#region songChange
+
 		public void NextSong()
 		{
 			if (soundOut == null) return;
@@ -158,6 +165,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 
 		}
+
 		public void PreviousSong()
 		{
 			if (soundOut == null) return;
@@ -179,15 +187,18 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void ChangeSong(int song)
 		{
+			if(song<0)return;;
 			CurrPlaying = song;
 			songChange = true;
 		}
+
 		public void RestartAndPause()
 		{
 			CurrPlaying--;
 			songChange = true;
 			paused = true;
 		}
+
 		public void RestartSong()
 		{
 			CurrPlaying--;
@@ -232,7 +243,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 
 			initialized = true;
-			return ParseForListView(list);
+			return ParseForListView(CurrPlaylist.SongList);
 		}
 
 
@@ -259,7 +270,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			}
 			
 			initialized = true;
-			return ParseForListView(parser.Songs);
+			return ParseForListView(CurrPlaylist.SongList);
 
 		}
 

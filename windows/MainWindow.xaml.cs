@@ -256,6 +256,11 @@ namespace PB_069_MusicPlayer
 
 		#region loadSongs
 
+		/// <summary>
+		/// Loading songFiles to current playlist
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
 		{
 
