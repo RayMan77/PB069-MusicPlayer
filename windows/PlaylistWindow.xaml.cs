@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PB_069_MusicPlayer.helpers;
+using PB_069_MusicPlayer.MusicPlayer;
 
 namespace PB_069_MusicPlayer
 {
@@ -22,21 +23,22 @@ namespace PB_069_MusicPlayer
 	/// </summary>
 	public partial class PlaylistWindow : Window
 	{
-		public PlaylistWindow()
+		private PlayManager pl;
+		public PlaylistWindow(PlayManager pl)
 		{
 			InitializeComponent();
-			
+			this.pl = pl;
 		}
 
 		private void listBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if(playlistBox.SelectedItems.Count>0)
+			if (playlistBox.SelectedItems.Count <= 0) return;
+
+			pl.ChangeSong(playlistBox.SelectedIndex-1);
 			Console.WriteLine(playlistBox.SelectedItems[0].ToString().Split('.').First());
-			
 		}
 
 		
-
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			WinHelp.WindowHelp(this);

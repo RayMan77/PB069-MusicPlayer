@@ -20,11 +20,7 @@ namespace PB_069_MusicPlayer
 
 		public readonly EqualizerWindow equalizerWindow;
 		public readonly PlaylistWindow playlistWindow;
-		
 		private PlayManager pl;
-		
-
-	
 		private Thread thread;
 		
 
@@ -33,13 +29,14 @@ namespace PB_069_MusicPlayer
 		{
 			
 			InitializeComponent();
-			equalizerWindow= new EqualizerWindow();
-			playlistWindow = new PlaylistWindow();
+			pl = new PlayManager();
+			thread = new Thread(pl.Play);
+			equalizerWindow = new EqualizerWindow();
+			playlistWindow = new PlaylistWindow(pl);
 			
 
 			StabilizeWindows();
-			pl = new PlayManager();
-			thread = new Thread(pl.Play);
+			
 			pl.OnSongChanged += SongChanged;
 
 		}
@@ -257,6 +254,8 @@ namespace PB_069_MusicPlayer
 		}
 
 
+		#region loadSongs
+
 		private void loadPlaylistBtn_Click(object sender, RoutedEventArgs e)
 		{
 
@@ -272,9 +271,8 @@ namespace PB_069_MusicPlayer
 			{
 				return;
 			}
-			pl.AddPlaylist(openFileD.FileName);
-			var songs = pl.ParseForListView(pl.CurrPlaylist.SongList);
-			playlistWindow.playlistBox.ItemsSource = songs;
+			
+			playlistWindow.playlistBox.ItemsSource = pl.AddPlaylist(openFileD.FileName); ;
 
 			
 			_pLactive = true;
@@ -298,9 +296,9 @@ namespace PB_069_MusicPlayer
 			{
 				return;
 			}
-			pl.AddToPlaylist(openFileD.FileNames);
-			var songs = pl.ParseForListView(pl.CurrPlaylist.SongList);
-			playlistWindow.playlistBox.ItemsSource = songs;
+			
+			
+			playlistWindow.playlistBox.ItemsSource = pl.AddToPlaylist(openFileD.FileNames); ;
 
 
 
@@ -327,9 +325,9 @@ namespace PB_069_MusicPlayer
 			var musicFiles = Directory.GetFiles(browserDialog.SelectedPath, "*.*", SearchOption.AllDirectories)
 				 .Where(s => ext.Any(s.EndsWith));
 			
-			pl.AddToPlaylist(musicFiles.Select(Path.GetFullPath).ToArray());
-			var songs = pl.ParseForListView(pl.CurrPlaylist.SongList);
-			playlistWindow.playlistBox.ItemsSource = songs;
+			
+			
+			playlistWindow.playlistBox.ItemsSource = pl.AddToPlaylist(musicFiles.Select(Path.GetFullPath).ToArray());
 
 
 
@@ -337,6 +335,8 @@ namespace PB_069_MusicPlayer
 			playlistWindow.Show();
 			StabilizeWindows();
 		}
+
+		#endregion
 	}
 	
 
