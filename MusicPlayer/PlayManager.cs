@@ -7,6 +7,7 @@ using System.Threading;
 using CSCore;
 using CSCore.Codecs;
 using CSCore.Codecs.WAV;
+using CSCore.CoreAudioAPI;
 using CSCore.SoundIn;
 using CSCore.SoundOut;
 using CSCore.Streams.Effects;
@@ -67,9 +68,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private bool paused;
 
 
-		
-		
-		
+		public float Volume { get; set; }
+
 
 		public event OnSongChangedHandler OnSongChanged;
 
@@ -94,7 +94,6 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		public void Play()
 		{
 			
-
 			while (CurrPlaying < CurrPlaylist.SongList.Count && Repeat==RepeatOptions.NoRepeat)
 			{
 				CurrSong = CurrPlaylist.SongList[CurrPlaying];
@@ -115,8 +114,10 @@ namespace PB_069_MusicPlayer.MusicPlayer
 							soundOut.Pause();
 						}
 						
+						
 						while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
 						{
+							soundOut.Volume = Volume;
 							if (songChange )
 							{
 								songChange = false;
