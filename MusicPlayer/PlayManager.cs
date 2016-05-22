@@ -20,14 +20,14 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		#region properties/variables
 
 		#region options/core
-		public enum RepeatOptions
+		private enum RepeatOptions
 		{
 			NoRepeat, RepeatThisPlaylist, GoToNextPlaylist
 		}
 
-		public bool Shuffle { get; set; }
+		private bool Shuffle { get; set; }
 
-		public RepeatOptions Repeat { get; set; }
+		private RepeatOptions Repeat { get; set; }
 
 
 		private IWaveSource soundSource;
@@ -46,11 +46,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		private List<Playlist> ListOfPlaylists;
 
-		public int CurrPlaying { get; set; }
+		private int CurrPlaying { get; set; }
 
-		public Song CurrSong { get; set; }
+		private Song CurrSong { get; set; }
 
-		public Playlist CurrPlaylist { get; set; }
+		private Playlist CurrPlaylist { get; set; }
 
 
 		private bool initialized;
@@ -93,7 +93,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			{
 				CurrSong = CurrPlaylist.SongList[CurrPlaying];
 				
-				//Console.WriteLine("playing " + song.SongName);
+				
 				OnSongChanged?.Invoke(this, new OnSongChanged(CurrSong.SongName));
 
 				using (soundSource = CodecFactory.Instance.GetCodec(CurrSong.SongPath))
@@ -179,7 +179,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void ChangeSong(int song)
 		{
-
+			CurrPlaying = song;
+			songChange = true;
 		}
 		public void RestartAndPause()
 		{
@@ -216,7 +217,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		#region PlaylistManagement
 
-		public void AddToPlaylist(string[] songs)
+		public List<string> AddToPlaylist(string[] songs)
 		{
 			var list = songs.Select(song => new Song(Path.GetFileNameWithoutExtension(song), song)).ToList();
 			
@@ -228,16 +229,20 @@ namespace PB_069_MusicPlayer.MusicPlayer
 				CurrPlaying = 0;
 				CurrSong = CurrPlaylist.SongList[CurrPlaying];
 			}
-			
+
+
 			initialized = true;
+			return ParseForListView(list);
 		}
+
+
 		public void AddPlaylist(Playlist playlist)
 		{
 			if(playlist!=null)
 				ListOfPlaylists.Add(playlist);
 		}
 
-		public void AddPlaylist(string path)
+		public List<string> AddPlaylist(string path)
 		{
 			var parser = new M3UParser(path);
 			
@@ -254,7 +259,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			}
 			
 			initialized = true;
-			
+			return ParseForListView(parser.Songs);
+
 		}
 
 		public List<string> ParseForListView(List<Song> songs )
@@ -294,12 +300,22 @@ namespace PB_069_MusicPlayer.MusicPlayer
 	public class OnSongChanged : EventArgs
 	{
 
-
+		private int Id;
 		private string SongName;
 
 		public OnSongChanged(string SongName)
 		{
 			this.SongName = SongName;
+		}
+
+		public OnSongChanged(int id)
+		{
+			Id = id;
+		}
+
+		public int GetSongId()
+		{
+			return Id;
 		}
 		public string GetSongName()
 		{
