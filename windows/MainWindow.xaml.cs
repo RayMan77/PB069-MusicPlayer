@@ -39,22 +39,22 @@ namespace PB_069_MusicPlayer
 			StabilizeWindows();
 			
 			pl.OnSongChangedHandler += SongChangedHandler;
-			pl.ProgressChangedHandler += ProgressChanged;
+			
 
 
-			progressTracker.ApplyTemplate();
-
-			var track = progressTracker.Template.FindName(
-
-				"PART_Track", progressTracker) as Track;
-
-			if (track == null) return;
-			var thumb = track.Thumb;
-
-			thumb.MouseEnter+= thumb_MouseEnter;
+//			progressTracker.ApplyTemplate();
+//
+//			var track = progressTracker.Template.FindName(
+//
+//				"PART_Track", progressTracker) as Track;
+//
+//			if (track == null) return;
+//			var thumb = track.Thumb;
+//
+//			thumb.MouseEnter+= thumb_MouseEnter;
 
 			var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-			dispatcherTimer.Tick += dispatcherTimer_Tick;
+			dispatcherTimer.Tick += progressTimer_Tick;
 			dispatcherTimer.Interval = new TimeSpan(0, 0,0,0,500);
 			dispatcherTimer.Start();
 
@@ -282,15 +282,6 @@ namespace PB_069_MusicPlayer
 		}
 		#endregion
 
-		private void ProgressChanged(object source, ProgressChanged e)
-		{
-			Dispatcher.Invoke(() =>
-			{
-				progressTracker.Value = e.Progress;
-				
-			});
-			
-		}
 
 		private void SongChangedHandler(object source, OnSongChanged e)
 		{
@@ -403,7 +394,7 @@ namespace PB_069_MusicPlayer
 		private void progressTracker_ValueChanged(object sender, DragCompletedEventArgs dragCompletedEventArgs)
 		{
 			Console.WriteLine("value Changed");
-			//pl.SetPosition(progressTracker.Value);
+			pl.SetPosition(progressTracker.Value);
 			
 			
 		}
@@ -411,7 +402,7 @@ namespace PB_069_MusicPlayer
 		private void progressTracker_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			
-			//pl.SetPosition(progressTracker.Value);
+			pl.SetPosition(progressTracker.Value);
 			Console.WriteLine("mouse up");
 
 
@@ -434,10 +425,11 @@ namespace PB_069_MusicPlayer
 		}
 
 
-		private void dispatcherTimer_Tick(object sender, EventArgs e)
+		private void progressTimer_Tick(object sender, EventArgs e)
 		{
 			
 			timeLabel.Content = TimeSpan.FromSeconds(pl.Time).ToString(@"mm\:ss");
+			//progressTracker.Value = pl.Progress;
 		}
 
 	}
