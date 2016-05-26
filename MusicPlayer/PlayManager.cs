@@ -75,13 +75,14 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		public bool RepeatSong { get; set; }
 
 		public float Volume { get; set; }
+		public double Progress { get; set; }
 
 
 		public event OnSongChangedHandler OnSongChangedHandler;
-		public event ProgressChangedHandler ProgressChangedHandler;
+		
 
 
-		private System.Windows.Threading.DispatcherTimer timer;
+		
 
 		#endregion
 
@@ -143,13 +144,13 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 								if (soundOut.PlaybackState != PlaybackState.Paused )
 								{
-									ProgressChangedHandler?.Invoke(this, new ProgressChanged((double)
-									soundSource.Position /soundSource.Length ));
+									Progress = (double)soundSource.Position/soundSource.Length;
+//									
 									
 								}
 								if (posChanged)
 								{
-									Console.WriteLine("pos changed");
+									//Console.WriteLine("pos changed");
 									posChanged = false;
 									soundSource.Position = (long)(position * soundSource.Length);
 									position = 0;
@@ -182,7 +183,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 					{
 						CurrPlaying++;
 					}
-					
+					Progress = 0;
+
 
 				}
 				#region repeat
@@ -390,7 +392,6 @@ namespace PB_069_MusicPlayer.MusicPlayer
 	#region events
 	public delegate void OnSongChangedHandler(object source, OnSongChanged songInfo);
 
-	public delegate void ProgressChangedHandler(object source, ProgressChanged progress);
 
 	public class OnSongChanged : EventArgs
 	{
@@ -417,13 +418,6 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		}
 	}
 
-	public class ProgressChanged : EventArgs
-	{
-		public double Progress { get; set; }
-		public ProgressChanged(double progress)
-		{
-			this.Progress = progress;
-		}
-	}
+	
 	#endregion
 }
