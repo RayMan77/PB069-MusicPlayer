@@ -13,6 +13,8 @@
 		<Image x:Key="Next" Source="/images/Next.png"/>
 		<Image x:Key="Prev" Source="/images/prevt.png"/>
 
+		
+
 		<Style TargetType="Button" >
 			<Setter Property="Background" Value="#737373"/>
 			<Setter Property="Foreground" Value="White"/>
@@ -89,7 +91,7 @@
 			</Setter>
 		</Style>
 
-		
+
 
 	</Window.Resources>
 
@@ -150,52 +152,55 @@
 		<Button x:Name="EQBtn"
 				Content="EQ" HorizontalAlignment="Left" Margin="340,16,0,0" VerticalAlignment="Top" Width="25" RenderTransformOrigin="3.539,1.244" Height="20" Grid.Row="1" Click="EQBtn_Click"
 				/>
-		
+
 		<Button x:Name="PlaylistBtn"
 				Content="Playlist" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
 
 		<Slider x:Name="progressTracker"
-				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2"/>
-		
-		
+				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2" Thumb.DragCompleted="progressTracker_ValueChanged"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Drop="progressTracker_Drop" Delay="0" />
+	
+
+
 		<Slider x:Name="volumeTracker"
-				HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="182" Grid.Row="4" Height="18" Thumb.DragCompleted="VolumeTracker_DragCompleted" Value="5" ValueChanged="volumeTracker_ValueChanged"/>
-		
+				HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="182" Grid.Row="4" Height="18" Thumb.DragCompleted="volumeTracker_DragCompleted" Value="0.5" ValueChanged="volumeTracker_ValueChanged" Maximum="1" IsMoveToPointEnabled="True"/>
+
 		<Label x:Name="nowPlayingLabel"
 			   Content="NowPlaying" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="355" Height="26" Grid.Row="2" Foreground="White"/>
-		
+
 		<Label x:Name="timeLabel"
 			   Content="00:00" Margin="156,3,0,0" VerticalAlignment="Top" Width="95" Height="35" FontSize="20" HorizontalAlignment="Left" Foreground="#FFACACAC" Grid.Row="1"/>
 
 		<Menu x:Name="menu"
 			  Height="22" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF747474" MouseDown="menu_MouseDown" Margin="266,0,0,0">
-			<Button Height="22" Width="35" RenderTransformOrigin="2.172,0.508" Content="Exit" Click="Button_Click" Background="#FFAAAAAA"/>
-			<Button Width="56" Content="Minimize" Height="20" RenderTransformOrigin="1.115,-0.822"/>
+			<Button  Content="Exit" Click="Button_Click" />
+			<Button  Content="Minimize" />
 		</Menu>
-		
-		<CheckBox x:Name="checkBox"
-				  Content="Shuffle" HorizontalAlignment="Left" Margin="10,8,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFACACAC"/>
-		
-		<CheckBox x:Name="checkBox1"
-				  Content="Track repeat" HorizontalAlignment="Left" Margin="10,24,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFB6B3B3"/>
+
+		<CheckBox x:Name="ShuffleCheckBox" 
+				  Content="Shuffle" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
+
+		<CheckBox x:Name="RepeatCheckBox" Checked="repeatCheckBox" Unchecked="repeatCheckBox"
+				  Content="Repeat Song" HorizontalAlignment="Left" Margin="10,15,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
 
 
 
 		<Grid>
 			<Button  Height="23" HorizontalAlignment="Left"  Name="loadBtn" VerticalAlignment="Top" Width="33" Click="rollDown" Margin="12,178,0,-179"  Content="Load">
-<!--				<Button.Content>-->
-<!--					<Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="10" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>-->
-<!--				</Button.Content>-->
+				<!--				<Button.Content>-->
+				<!--					<Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="10" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>-->
+				<!--				</Button.Content>-->
 				<Button.ContextMenu>
 					<ContextMenu >
 						<MenuItem Foreground="Snow" Header="Playlist" Click="loadPlaylistBtn_Click"/>
 						<MenuItem Foreground="Snow" Header="Songs" Click="loadSongs_OnClick"/>
 						<MenuItem Foreground="Snow" Header="Folder" Click="loadFolder_OnClick"/>
-						
+
 					</ContextMenu>
 				</Button.ContextMenu>
 			</Button>
 		</Grid>
+		<CheckBox x:Name="RepeatPlaylistCheckBox" Checked="repeatPlaylist" Unchecked="repeatPlaylist"
+			Content="Repeat Playlist" HorizontalAlignment="Left" Margin="10,29,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
 
 
 

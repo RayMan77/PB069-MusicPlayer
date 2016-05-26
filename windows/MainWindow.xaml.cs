@@ -38,8 +38,40 @@ namespace PB_069_MusicPlayer
 
 			StabilizeWindows();
 			
-			pl.OnSongChanged += SongChanged;
+			pl.OnSongChangedHandler += SongChangedHandler;
+			pl.ProgressChangedHandler += ProgressChanged;
 
+
+			progressTracker.ApplyTemplate();
+
+			var track = progressTracker.Template.FindName(
+
+				"PART_Track", progressTracker) as Track;
+
+			if (track == null) return;
+			var thumb = track.Thumb;
+
+			thumb.MouseEnter+= thumb_MouseEnter;
+
+			var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+			dispatcherTimer.Tick += dispatcherTimer_Tick;
+			dispatcherTimer.Interval = new TimeSpan(0, 0,0,0,500);
+			dispatcherTimer.Start();
+
+
+
+
+
+
+
+
+
+	}
+
+		private void thumb_MouseEnter(object sender, MouseEventArgs e)
+		{
+			Console.WriteLine("mouse enter thumb");
+			pl.SetPosition(progressTracker.Value);
 		}
 
 		#region Window Closing disposing
@@ -178,6 +210,7 @@ namespace PB_069_MusicPlayer
 			else
 			{
 				pl.RestartSong();
+				progressTracker.Value = 0;
 			}
 			
 		}
@@ -205,25 +238,29 @@ namespace PB_069_MusicPlayer
 		{
 			if (!pl.IsInitialized()) return;
 			pl.PreviousSong();
-			
+			progressTracker.Value = 0;
+
 		}
 
 		private void NextSongStopBtnBtn_Click(object sender, RoutedEventArgs e)
 		{
 			if (!pl.IsInitialized()) return;
 			pl.NextSong();
-			
+			progressTracker.Value = 0;
+
 
 
 		}
 
 		private void StopPlaybackBtn_Click(object sender, RoutedEventArgs e)
 		{
+			
 			if (!pl.IsInitialized()) return;
 			pl.RestartAndPause();
+			progressTracker.Value = 0;
 
-			
-			
+
+
 		}
 
 
@@ -245,7 +282,17 @@ namespace PB_069_MusicPlayer
 		}
 		#endregion
 
-		private void SongChanged(object source, OnSongChanged e)
+		private void ProgressChanged(object source, ProgressChanged e)
+		{
+			Dispatcher.Invoke(() =>
+			{
+				progressTracker.Value = e.Progress;
+				
+			});
+			
+		}
+
+		private void SongChangedHandler(object source, OnSongChanged e)
 		{
 			Dispatcher.Invoke(() =>
 			{
@@ -343,15 +390,56 @@ namespace PB_069_MusicPlayer
 
 		#endregion
 
-		private void VolumeTracker_DragCompleted(object sender, DragCompletedEventArgs e)
+		private void volumeTracker_DragCompleted(object sender, DragCompletedEventArgs e)
 		{
-			pl.Volume = (float) (volumeTracker.Value/10);
+			pl.Volume = (float) volumeTracker.Value;
 		}
 
 		private void volumeTracker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			pl.Volume = (float)(volumeTracker.Value / 10);
+			pl.Volume = (float)volumeTracker.Value ;
 		}
+
+		private void progressTracker_ValueChanged(object sender, DragCompletedEventArgs dragCompletedEventArgs)
+		{
+			Console.WriteLine("value Changed");
+			//pl.SetPosition(progressTracker.Value);
+			
+			
+		}
+		
+		private void progressTracker_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			
+			//pl.SetPosition(progressTracker.Value);
+			Console.WriteLine("mouse up");
+
+
+		}
+
+		private void repeatPlaylist(object sender, RoutedEventArgs e)
+		{
+			
+			pl.SetRepeat(RepeatPlaylistCheckBox.IsChecked != null && RepeatPlaylistCheckBox.IsChecked.Value);
+		}
+
+		private void repeatCheckBox(object sender, RoutedEventArgs e)
+		{
+			pl.RepeatSong = RepeatCheckBox.IsChecked.Value;
+		}
+
+		private void progressTracker_Drop(object sender, DragEventArgs e)
+		{
+			Console.WriteLine("drop");
+		}
+
+
+		private void dispatcherTimer_Tick(object sender, EventArgs e)
+		{
+			
+			timeLabel.Content = TimeSpan.FromSeconds(pl.Time).ToString(@"mm\:ss");
+		}
+
 	}
 	
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using CSCore;
 using CSCore.Codecs;
@@ -46,11 +47,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private RepeatOptions Repeat { get; set; }
 
 
-		
-		
-
-
-
+	
 		private List<Playlist> ListOfPlaylists;
 
 		private int CurrPlaying { get; set; }
@@ -58,6 +55,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private Song CurrSong { get; set; }
 
 		private Playlist CurrPlaylist { get; set; }
+		private int CurrPlaylistNum;
 
 
 		private bool initialized;
@@ -66,14 +64,24 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private bool plChanged;
 		
 		private bool paused;
+		private bool posChanged;
 
-		public TimeSpan Time { get; set; }
 
+		private double position;
+
+		
+
+		public int Time { get; set; }
+		public bool RepeatSong { get; set; }
 
 		public float Volume { get; set; }
 
 
-		public event OnSongChangedHandler OnSongChanged;
+		public event OnSongChangedHandler OnSongChangedHandler;
+		public event ProgressChangedHandler ProgressChangedHandler;
+
+
+		private System.Windows.Threading.DispatcherTimer timer;
 
 		#endregion
 
@@ -85,7 +93,13 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			initialized = false;
 			CurrPlaylist = new Playlist();
 			ListOfPlaylists = new List<Playlist> {CurrPlaylist};
+			CurrPlaylistNum = 0;
+			posChanged = false;
+			position = 0;
+
 			
+			
+
 		}
 		#endregion
 
@@ -95,58 +109,101 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void Play()
 		{
-			
-			while (CurrPlaying < CurrPlaylist.SongList.Count && Repeat==RepeatOptions.NoRepeat)
+			while (true )
 			{
-				CurrSong = CurrPlaylist.SongList[CurrPlaying];
-				
-				
-				OnSongChanged?.Invoke(this, new OnSongChanged(CurrSong.SongName));
-
-				using (soundSource = CodecFactory.Instance.GetCodec(CurrSong.SongPath))
+				while (CurrPlaying < CurrPlaylist.SongList.Count )
 				{
-					using (soundOut = GetSoundOut())
+					CurrSong = CurrPlaylist.SongList[CurrPlaying];
+
+
+					OnSongChangedHandler?.Invoke(this, new OnSongChanged(CurrSong.SongName));
+
+					using (soundSource = CodecFactory.Instance.GetCodec(CurrSong.SongPath))
 					{
-						soundOut.Initialize(soundSource);
-						soundOut.Play();
-
-						if (paused)
+						using (soundOut = GetSoundOut())
 						{
-							paused = false;
-							soundOut.Pause();
-						}
-						
-						
-						while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
-						{
+							soundOut.Initialize(soundSource);
+							soundOut.Play();
 							
-							soundOut.Volume = Volume;
-							if (songChange )
+
+
+							if (paused)
 							{
-								songChange = false;
-								break;
+								paused = false;
+								soundOut.Pause();
 							}
-							if (plChanged)
+
+
+							
+
+							while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
 							{
-								plChanged = false;
+								Time = (int) (soundSource.Position/soundSource.WaveFormat.BytesPerSecond);
 								
-								break;
-							}
-							
-							Thread.Sleep(1);
-						}
 
+								if (soundOut.PlaybackState != PlaybackState.Paused )
+								{
+									ProgressChangedHandler?.Invoke(this, new ProgressChanged((double)
+									soundSource.Position /soundSource.Length ));
+									
+								}
+								if (posChanged)
+								{
+									Console.WriteLine("pos changed");
+									posChanged = false;
+									soundSource.Position = (long)(position * soundSource.Length);
+									position = 0;
+								}
+								
+								soundOut.Volume = Volume;
+
+								
+
+								if (songChange)
+								{
+									songChange = false;
+									break;
+								}
+								if (plChanged)
+								{
+									plChanged = false;
+
+									break;
+								}
+								
+								Thread.Sleep(1);
+							}
+
+
+						}
 
 					}
+					if (!RepeatSong)
+					{
+						CurrPlaying++;
+					}
+					
 
 				}
-				
-				CurrPlaying++;
-				
-				
-				
+				#region repeat
+				CurrPlaying = 0;
+				switch (Repeat)
+				{
+					case RepeatOptions.NoRepeat:
+						paused = true;
+						break;
+					case RepeatOptions.GoToNextPlaylist:
+						CurrPlaylistNum++;
+						if (CurrPlaylistNum > ListOfPlaylists.Count)
+						{
+							CurrPlaylistNum = 0;
+						}
+						CurrPlaylist = ListOfPlaylists[CurrPlaylistNum];
+						break;
+				}
+
+				#endregion
 			}
-			Console.WriteLine("the end");
 			
 		}
 
@@ -212,6 +269,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		#endregion
 
 		#region songPausePlay
+
+		public void SetProgress(double percentage)
+		{
+			
+		}
 
 		public void Pause()
 		{
@@ -309,12 +371,29 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 
 		#endregion
+
+		
+
+		public void SetRepeat(bool repeat)
+		{
+			Repeat = repeat ? RepeatOptions.RepeatThisPlaylist : RepeatOptions.NoRepeat;
+		}
+
+		public void SetPosition(double pos)
+		{
+			posChanged = true;
+			position = pos;
+
+		}
 	}
 
+	#region events
 	public delegate void OnSongChangedHandler(object source, OnSongChanged songInfo);
+
+	public delegate void ProgressChangedHandler(object source, ProgressChanged progress);
+
 	public class OnSongChanged : EventArgs
 	{
-
 		private int Id;
 		private string SongName;
 
@@ -338,5 +417,13 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		}
 	}
 
-
+	public class ProgressChanged : EventArgs
+	{
+		public double Progress { get; set; }
+		public ProgressChanged(double progress)
+		{
+			this.Progress = progress;
+		}
+	}
+	#endregion
 }
