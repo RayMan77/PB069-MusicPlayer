@@ -72,7 +72,7 @@ namespace PB_069_MusicPlayer
 
 		#region Window Closing disposing
 
-		private void quitDispoze()
+		private void QuitDispose()
 		{
 			if (!thread.IsAlive) return;
 			pl.Dispose();
@@ -82,14 +82,14 @@ namespace PB_069_MusicPlayer
 		{
 					
 			Application.Current.Shutdown();
-			quitDispoze();
+			QuitDispose();
 			
 		}
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 					
 			Application.Current.Shutdown();
-			quitDispoze();
+			QuitDispose();
 			
 		}
 		#endregion
@@ -264,6 +264,7 @@ namespace PB_069_MusicPlayer
 
 		
 		#endregion
+
 		private void rollDown(object sender, RoutedEventArgs e)
 				{
 					var btn = sender as Button;
