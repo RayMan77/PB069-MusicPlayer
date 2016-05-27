@@ -43,6 +43,10 @@ namespace PB_069_MusicPlayer
 		{
 			WinHelp.WindowHelp(this);
 		}
-		
+
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			playlistBox.Height = this.Height - 25;
+		}
 	}
 }

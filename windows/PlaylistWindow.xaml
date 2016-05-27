@@ -18,13 +18,13 @@
 		ResizeMode="CanResizeWithGrip"
 		
 		ShowInTaskbar="False" 
-		Loaded="Window_Loaded" >
+		Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" >
 	<Grid >
 		<Grid.RowDefinitions>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		<ListBox x:Name="playlistBox" HorizontalAlignment="Center" 
-				 MinHeight="250" Height="329" MaxHeight="750" Width="365"
+				 MinHeight="250" Height="325" MaxHeight="750" Width="365"
 				 Margin="10,11,10,0" VerticalAlignment="Top"  Background="#FF383837" Foreground="White" MouseDoubleClick="listBox_MouseDoubleClick"/>
 
 	</Grid>
