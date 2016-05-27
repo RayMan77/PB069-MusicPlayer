@@ -157,12 +157,12 @@
 				Content="Playlist" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
 
 		<Slider x:Name="progressTracker"
-				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2" Thumb.DragCompleted="progressTracker_ValueChanged"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Drop="progressTracker_Drop" Delay="0" />
+				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2" Thumb.DragCompleted="progressTracker_ValueChanged"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Drop="progressTracker_Drop" Delay="0" PreviewMouseDown="progressTracker_PreviewMouseDown" MouseLeftButtonDown="progressTracker_MouseLeftButtonDown" PreviewMouseLeftButtonDown="progressTracker_PreviewMouseLeftButtonDown" />
 	
 
 
 		<Slider x:Name="volumeTracker"
-				HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="182" Grid.Row="4" Height="18" Thumb.DragCompleted="volumeTracker_DragCompleted" Value="0.5" ValueChanged="volumeTracker_ValueChanged" Maximum="1" IsMoveToPointEnabled="True"/>
+				HorizontalAlignment="Left" Margin="193,3,0,0" VerticalAlignment="Top" Width="182" Grid.Row="4" Height="18" Thumb.DragCompleted="volumeTracker_DragCompleted" Value="0.25" ValueChanged="volumeTracker_ValueChanged" Maximum="1" IsMoveToPointEnabled="True"/>
 
 		<Label x:Name="nowPlayingLabel"
 			   Content="NowPlaying" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="355" Height="26" Grid.Row="2" Foreground="White"/>
@@ -176,7 +176,7 @@
 			<Button  Content="Minimize" />
 		</Menu>
 
-		<CheckBox x:Name="ShuffleCheckBox" 
+		<CheckBox x:Name="ShuffleCheckBox" Checked="shuffleCheckBox_OnChanged" Unchecked="shuffleCheckBox_OnChanged"
 				  Content="Shuffle" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
 
 		<CheckBox x:Name="RepeatCheckBox" Checked="repeatCheckBox" Unchecked="repeatCheckBox"

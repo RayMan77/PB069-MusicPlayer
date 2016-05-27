@@ -28,9 +28,13 @@ namespace PB_069_MusicPlayer
 
 		public MainWindow()
 		{
-			pl = new PlayManager();
-			thread = new Thread(pl.Play);
 			InitializeComponent();
+			pl = new PlayManager(
+				ShuffleCheckBox.IsChecked != null &&
+				ShuffleCheckBox.IsChecked.Value,RepeatPlaylistCheckBox.IsChecked != null && RepeatPlaylistCheckBox.IsChecked.Value,RepeatCheckBox.IsChecked != null &&
+				RepeatCheckBox.IsChecked.Value);
+			thread = new Thread(pl.Play);
+			
 			
 			equalizerWindow = new EqualizerWindow();
 			playlistWindow = new PlaylistWindow(pl);
@@ -53,18 +57,10 @@ namespace PB_069_MusicPlayer
 //
 //			thumb.MouseEnter+= thumb_MouseEnter;
 
-			var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-			dispatcherTimer.Tick += progressTimer_Tick;
-			dispatcherTimer.Interval = new TimeSpan(0, 0,0,0,500);
-			dispatcherTimer.Start();
-
-
-
-
-
-
-
-
+			var progressTimer = new System.Windows.Threading.DispatcherTimer();
+			progressTimer.Tick += progressTimer_Tick;
+			progressTimer.Interval = new TimeSpan(0, 0,0,0,250);
+			progressTimer.Start();
 
 	}
 
@@ -239,6 +235,7 @@ namespace PB_069_MusicPlayer
 			if (!pl.IsInitialized()) return;
 			pl.PreviousSong();
 			progressTracker.Value = 0;
+			
 
 		}
 
@@ -247,7 +244,7 @@ namespace PB_069_MusicPlayer
 			if (!pl.IsInitialized()) return;
 			pl.NextSong();
 			progressTracker.Value = 0;
-
+			
 
 
 		}
@@ -265,29 +262,32 @@ namespace PB_069_MusicPlayer
 
 
 
-		private void rollDown(object sender, RoutedEventArgs e)
-		{
-			var btn = sender as Button;
-			if (btn.ContextMenu.IsEnabled)
-			{
-				btn.ContextMenu.IsEnabled = false;
-				btn.ContextMenu.StaysOpen = false;
-				btn.ContextMenu.IsOpen = false;
-			}
-
-			btn.ContextMenu.IsEnabled = true;
-			btn.ContextMenu.PlacementTarget = (sender as Button);
-			btn.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-			btn.ContextMenu.IsOpen = true;
-		}
+		
 		#endregion
+		private void rollDown(object sender, RoutedEventArgs e)
+				{
+					var btn = sender as Button;
+					if (btn.ContextMenu.IsEnabled)
+					{
+						btn.ContextMenu.IsEnabled = false;
+						btn.ContextMenu.StaysOpen = false;
+						btn.ContextMenu.IsOpen = false;
+					}
 
+					btn.ContextMenu.IsEnabled = true;
+					btn.ContextMenu.PlacementTarget = (sender as Button);
+					btn.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+					btn.ContextMenu.IsOpen = true;
+				}
 
 		private void SongChangedHandler(object source, OnSongChanged e)
 		{
 			Dispatcher.Invoke(() =>
 			{
+				
 				nowPlayingLabel.Content = e.GetSongName();
+				playlistWindow.playlistBox.SelectedItem = pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
+				playlistWindow.playlistBox.ScrollIntoView(playlistWindow.playlistBox.SelectedItem);
 			});
 
 		}
@@ -388,13 +388,17 @@ namespace PB_069_MusicPlayer
 
 		private void volumeTracker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			pl.Volume = (float)volumeTracker.Value ;
+			if (pl != null)
+			{
+				pl.Volume = (float)volumeTracker.Value ;
+			}
+			
 		}
 
 		private void progressTracker_ValueChanged(object sender, DragCompletedEventArgs dragCompletedEventArgs)
 		{
 			Console.WriteLine("value Changed");
-			pl.SetPosition(progressTracker.Value);
+			//pl.SetPosition(progressTracker.Value);
 			
 			
 		}
@@ -403,6 +407,7 @@ namespace PB_069_MusicPlayer
 		{
 			
 			pl.SetPosition(progressTracker.Value);
+			
 			Console.WriteLine("mouse up");
 
 
@@ -429,9 +434,36 @@ namespace PB_069_MusicPlayer
 		{
 			
 			timeLabel.Content = TimeSpan.FromSeconds(pl.Time).ToString(@"mm\:ss");
-			//progressTracker.Value = pl.Progress;
+			progressTracker.Value = pl.Progress;
 		}
 
+		
+
+		private void progressTracker_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+		{
+			//pl.SetPosition(progressTracker.Value);
+			Console.WriteLine("mouse down");
+		}
+
+		private void progressTracker_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			pl.SetPosition(progressTracker.Value);
+			Console.WriteLine("left mouse down");
+		}
+
+		private void progressTracker_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			pl.SetPosition(progressTracker.Value);
+			Console.WriteLine("prev left mouse down");
+		}
+
+		private void shuffleCheckBox_OnChanged(object sender, RoutedEventArgs e)
+		{
+			if (!pl.IsInitialized()) return;
+			if (ShuffleCheckBox.IsChecked != null) pl.Shuffle = ShuffleCheckBox.IsChecked.Value;
+			var shuff = new Thread(pl.ShufflePlaylist);
+			shuff.Start();
+		}
 	}
 	
 
