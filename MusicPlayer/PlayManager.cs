@@ -35,22 +35,40 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		#region properties/variables
 
-		
+		public bool Shuffle
+		{
+			get { return _shuffle; }
+			set
+			{
+				_shuffle = value;
+				if (!value && initialized)
+				{
+					CurrPlaying = shuffleArr[CurrPlaying];
+				}
+			}
+		}
 
-		private enum RepeatOptions
+		private int[] shuffleArr;
+
+
+		#region repeat
+		private RepeatOptions repeat;
+		
+		public void SetRepeat(bool repeat)
+		{
+			this.repeat = repeat ? RepeatOptions.RepeatThisPlaylist : RepeatOptions.NoRepeat;
+		}
+		public enum RepeatOptions
 		{
 			NoRepeat, RepeatThisPlaylist, GoToNextPlaylist
 		}
-
-		private bool Shuffle { get; set; }
-
-		private RepeatOptions Repeat { get; set; }
+		#endregion
 
 
-	
+
 		private List<Playlist> ListOfPlaylists;
 
-		private int CurrPlaying { get; set; }
+		public int CurrPlaying { get;private set; }
 
 		private Song CurrSong { get; set; }
 
@@ -64,12 +82,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		private bool plChanged;
 		
 		private bool paused;
-		private bool posChanged;
+		private bool _shuffle;
 
-
-		private double position;
-
-		
 
 		public int Time { get; set; }
 		public bool RepeatSong { get; set; }
@@ -78,29 +92,44 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		public double Progress { get; set; }
 
 
+		public int CurrPlaylingShuff
+		{
+			get { return shuffleArr[CurrPlaying]; }
+			private set {}
+		}
+
+
 		public event OnSongChangedHandler OnSongChangedHandler;
 		
 
 
 		
 
+
+
 		#endregion
 
 		#region constructors
 
 
-		public PlayManager()
+		public PlayManager():this(false,false,false)
+		{
+			
+
+		}
+
+		public PlayManager(bool shuffle, bool repeatPlaylist, bool reapeatSong)
 		{
 			initialized = false;
 			CurrPlaylist = new Playlist();
-			ListOfPlaylists = new List<Playlist> {CurrPlaylist};
+			ListOfPlaylists = new List<Playlist> { CurrPlaylist };
 			CurrPlaylistNum = 0;
-			posChanged = false;
-			position = 0;
-
-			
-			
-
+			shuffleArr=new int[CurrPlaylist.SongList.Count];
+			Shuffle = shuffle;
+			ShufflePlaylist();
+			RepeatSong = reapeatSong;
+			SetRepeat(repeatPlaylist);
+			Volume =  0.25f;
 		}
 		#endregion
 
@@ -114,7 +143,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			{
 				while (CurrPlaying < CurrPlaylist.SongList.Count )
 				{
-					CurrSong = CurrPlaylist.SongList[CurrPlaying];
+					CurrSong = Shuffle ? CurrPlaylist.SongList[shuffleArr[CurrPlaying] ] : CurrPlaylist.SongList[CurrPlaying];
+					
 
 
 					OnSongChangedHandler?.Invoke(this, new OnSongChanged(CurrSong.SongName));
@@ -139,25 +169,6 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 							while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
 							{
-								Time = (int) (soundSource.Position/soundSource.WaveFormat.BytesPerSecond);
-								
-
-								if (soundOut.PlaybackState != PlaybackState.Paused )
-								{
-									Progress = (double)soundSource.Position/soundSource.Length;
-//									
-									
-								}
-								if (posChanged)
-								{
-									//Console.WriteLine("pos changed");
-									posChanged = false;
-									soundSource.Position = (long)(position * soundSource.Length);
-									position = 0;
-								}
-								
-								soundOut.Volume = Volume;
-
 								
 
 								if (songChange)
@@ -171,6 +182,13 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 									break;
 								}
+								Time = (int) (soundSource.Position/soundSource.WaveFormat.BytesPerSecond);
+								Progress = (double)soundSource.Position/soundSource.Length;
+								soundOut.Volume = Volume;
+
+								
+
+								
 								
 								Thread.Sleep(1);
 							}
@@ -189,7 +207,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 				}
 				#region repeat
 				CurrPlaying = 0;
-				switch (Repeat)
+				switch (repeat)
 				{
 					case RepeatOptions.NoRepeat:
 						paused = true;
@@ -272,11 +290,6 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		#region songPausePlay
 
-		public void SetProgress(double percentage)
-		{
-			
-		}
-
 		public void Pause()
 		{
 			soundOut.Pause();
@@ -354,8 +367,31 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			return list;
 		}
 
-		
 
+
+
+		public void ShufflePlaylist()
+		{
+			if (!Shuffle) return;
+			shuffleArr = new int[CurrPlaylist.SongList.Count];
+			Console.WriteLine(CurrPlaying + " curr play");
+			for (int i = 0; i < shuffleArr.Length; i++)
+			{
+				shuffleArr[i] = i;
+			}
+			Random r = new Random();
+			for (int i = shuffleArr.Length; i > 0; i--)
+			{
+				int j = r.Next(i);
+				int k = shuffleArr[j];
+				shuffleArr[j] = shuffleArr[i - 1];
+				shuffleArr[i - 1] = k;
+			}
+			foreach (var i in shuffleArr)
+			{
+				Console.WriteLine(i + " ");
+			}
+		}
 		#endregion
 
 		#region initialized/end
@@ -376,17 +412,19 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		
 
-		public void SetRepeat(bool repeat)
-		{
-			Repeat = repeat ? RepeatOptions.RepeatThisPlaylist : RepeatOptions.NoRepeat;
-		}
+		
 
 		public void SetPosition(double pos)
 		{
-			posChanged = true;
-			position = pos;
+			if (initialized)
+			{
+				soundSource.Position = (long)(pos * soundSource.Length);
+			}
+			
 
 		}
+
+		
 	}
 
 	#region events
