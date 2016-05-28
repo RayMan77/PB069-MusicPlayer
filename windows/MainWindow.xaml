@@ -157,7 +157,7 @@
 				Content="Playlist" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
 
 		<Slider x:Name="progressTracker"
-				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2" Thumb.DragCompleted="progressTracker_ValueChanged"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Drop="progressTracker_Drop" Delay="0" PreviewMouseDown="progressTracker_PreviewMouseDown" MouseLeftButtonDown="progressTracker_MouseLeftButtonDown" PreviewMouseLeftButtonDown="progressTracker_PreviewMouseLeftButtonDown" />
+				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Delay="0"  />
 	
 
 
@@ -170,11 +170,10 @@
 		<Label x:Name="timeLabel"
 			   Content="00:00" Margin="156,3,0,0" VerticalAlignment="Top" Width="95" Height="35" FontSize="20" HorizontalAlignment="Left" Foreground="#FFACACAC" Grid.Row="1"/>
 
-		<Menu x:Name="menu"
-			  Height="22" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF747474" MouseDown="menu_MouseDown" Margin="266,0,0,0">
-			<Button  Content="Exit" Click="Button_Click" />
-			<Button  Content="Minimize" />
-		</Menu>
+		
+		<Button  Content="x" Click="Button_Click" Margin="364,0,0,0" />
+		<Button  Content="_" Margin="343,0,20,0" Height="22" VerticalAlignment="Top" Click="Button_Click_1" />
+		
 
 		<CheckBox x:Name="ShuffleCheckBox" Checked="shuffleCheckBox_OnChanged" Unchecked="shuffleCheckBox_OnChanged"
 				  Content="Shuffle" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>

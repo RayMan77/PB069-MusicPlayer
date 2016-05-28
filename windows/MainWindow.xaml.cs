@@ -23,6 +23,7 @@ namespace PB_069_MusicPlayer
 		public readonly PlaylistWindow playlistWindow;
 		private PlayManager pl;
 		private Thread thread;
+		private bool setPos;
 		
 
 
@@ -43,32 +44,16 @@ namespace PB_069_MusicPlayer
 			StabilizeWindows();
 			
 			pl.OnSongChangedHandler += SongChangedHandler;
-			
 
-
-//			progressTracker.ApplyTemplate();
-//
-//			var track = progressTracker.Template.FindName(
-//
-//				"PART_Track", progressTracker) as Track;
-//
-//			if (track == null) return;
-//			var thumb = track.Thumb;
-//
-//			thumb.MouseEnter+= thumb_MouseEnter;
 
 			var progressTimer = new System.Windows.Threading.DispatcherTimer();
 			progressTimer.Tick += progressTimer_Tick;
-			progressTimer.Interval = new TimeSpan(0, 0,0,0,250);
+			progressTimer.Interval = new TimeSpan(0, 0,0,1);
 			progressTimer.Start();
 
 	}
 
-		private void thumb_MouseEnter(object sender, MouseEventArgs e)
-		{
-			Console.WriteLine("mouse enter thumb");
-			pl.SetPosition(progressTracker.Value);
-		}
+		
 
 		#region Window Closing disposing
 
@@ -396,23 +381,6 @@ namespace PB_069_MusicPlayer
 			
 		}
 
-		private void progressTracker_ValueChanged(object sender, DragCompletedEventArgs dragCompletedEventArgs)
-		{
-			Console.WriteLine("value Changed");
-			//pl.SetPosition(progressTracker.Value);
-			
-			
-		}
-		
-		private void progressTracker_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			
-			pl.SetPosition(progressTracker.Value);
-			
-			Console.WriteLine("mouse up");
-
-
-		}
 
 		private void repeatPlaylist(object sender, RoutedEventArgs e)
 		{
@@ -425,38 +393,31 @@ namespace PB_069_MusicPlayer
 			pl.RepeatSong = RepeatCheckBox.IsChecked.Value;
 		}
 
-		private void progressTracker_Drop(object sender, DragEventArgs e)
-		{
-			Console.WriteLine("drop");
-		}
-
-
 		private void progressTimer_Tick(object sender, EventArgs e)
 		{
 			
 			timeLabel.Content = TimeSpan.FromSeconds(pl.Time).ToString(@"mm\:ss");
+			if(!setPos)
 			progressTracker.Value = pl.Progress;
+			Console.WriteLine(pl.Progress);
+		}
+
+		private void progressTracker_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			setPos = true;
+			Console.WriteLine(progressTracker.Value + " mouse up");
+			pl.SetPosition(progressTracker.Value);
+
+			
+			setPos = false;
+
 		}
 
 		
 
-		private void progressTracker_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-		{
-			//pl.SetPosition(progressTracker.Value);
-			Console.WriteLine("mouse down");
-		}
+		
 
-		private void progressTracker_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			pl.SetPosition(progressTracker.Value);
-			Console.WriteLine("left mouse down");
-		}
-
-		private void progressTracker_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			pl.SetPosition(progressTracker.Value);
-			Console.WriteLine("prev left mouse down");
-		}
+		
 
 		private void shuffleCheckBox_OnChanged(object sender, RoutedEventArgs e)
 		{
@@ -464,6 +425,11 @@ namespace PB_069_MusicPlayer
 			if (ShuffleCheckBox.IsChecked != null) pl.Shuffle = ShuffleCheckBox.IsChecked.Value;
 			var shuff = new Thread(pl.ShufflePlaylist);
 			shuff.Start();
+		}
+
+		private void Button_Click_1(object sender, RoutedEventArgs e)
+		{
+			WindowState = WindowState.Minimized;
 		}
 	}
 	
