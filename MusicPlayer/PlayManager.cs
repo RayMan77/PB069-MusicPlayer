@@ -11,6 +11,7 @@ using CSCore.Codecs.WAV;
 using CSCore.CoreAudioAPI;
 using CSCore.SoundIn;
 using CSCore.SoundOut;
+using CSCore.Streams;
 using CSCore.Streams.Effects;
 using PlaylistParsers;
 
@@ -90,6 +91,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public float Volume { get; set; }
 		public double Progress { get; set; }
+		private Equalizer equalizer;
 
 
 		public int CurrPlaylingShuff
@@ -112,11 +114,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		#region constructors
 
 
-		public PlayManager():this(false,false,false)
-		{
-			
-
-		}
+		public PlayManager():this(false,false,false){}
 
 		public PlayManager(bool shuffle, bool repeatPlaylist, bool reapeatSong)
 		{
@@ -130,6 +128,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			RepeatSong = reapeatSong;
 			SetRepeat(repeatPlaylist);
 			Volume =  0.25f;
+
+
+
+
+			
 		}
 		#endregion
 
@@ -155,7 +158,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 						{
 							soundOut.Initialize(soundSource);
 							soundOut.Play();
-							
+							equalizer = new Equalizer(soundSource);
+
 
 
 							if (paused)
@@ -416,7 +420,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void SetPosition(double pos)
 		{
-			if (initialized)
+			if (initialized && soundSource!=null)
 			{
 				soundSource.Position = (long)(pos * soundSource.Length);
 			}
