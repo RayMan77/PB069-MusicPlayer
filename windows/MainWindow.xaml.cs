@@ -30,6 +30,9 @@ namespace PB_069_MusicPlayer
 		public MainWindow()
 		{
 			InitializeComponent();
+			progressTracker.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(Slider_MouseLeftButtonDown), true);
+			progressTracker.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(Slider_MouseLeftButtonUp), true);
+
 			pl = new PlayManager(
 				ShuffleCheckBox.IsChecked != null &&
 				ShuffleCheckBox.IsChecked.Value,RepeatPlaylistCheckBox.IsChecked != null && RepeatPlaylistCheckBox.IsChecked.Value,RepeatCheckBox.IsChecked != null &&
@@ -53,7 +56,21 @@ namespace PB_069_MusicPlayer
 
 	}
 
-		
+		private void Slider_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			Console.WriteLine("up2");
+			setPos = true;
+			pl.SetPosition(progressTracker.Value);
+			setPos = false;
+		}
+
+		private void Slider_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			Console.WriteLine("down");
+			setPos = true;
+			pl.SetPosition(progressTracker.Value);
+			setPos = false;
+		}
 
 		#region Window Closing disposing
 
@@ -272,7 +289,8 @@ namespace PB_069_MusicPlayer
 			{
 				
 				nowPlayingLabel.Content = e.GetSongName();
-				playlistWindow.playlistBox.SelectedItem = pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
+				playlistWindow.playlistBox.SelectedItem =
+				pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
 				playlistWindow.playlistBox.ScrollIntoView(playlistWindow.playlistBox.SelectedItem);
 			});
 
@@ -296,14 +314,15 @@ namespace PB_069_MusicPlayer
 				
 			};
 			openFileD.ShowDialog();
-			if (openFileD.FileName.Equals(""))
+			if (string.IsNullOrEmpty(openFileD.FileName))
 			{
 				return;
 			}
 			
-			playlistWindow.playlistBox.ItemsSource = pl.AddPlaylist(openFileD.FileName); ;
+			playlistWindow.playlistBox.ItemsSource = pl.AddPlaylist(openFileD.FileName);
 
-			
+			playlistWindow.playlistBox.SelectedItem =
+				pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
 			_pLactive = true;
 			playlistWindow.Show();
 			StabilizeWindows();
@@ -330,7 +349,8 @@ namespace PB_069_MusicPlayer
 			playlistWindow.playlistBox.ItemsSource = pl.AddToPlaylist(openFileD.FileNames); ;
 
 
-
+			playlistWindow.playlistBox.SelectedItem =
+				pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
 			_pLactive = true;
 
 			playlistWindow.Show();
@@ -358,7 +378,8 @@ namespace PB_069_MusicPlayer
 			
 			playlistWindow.playlistBox.ItemsSource = pl.AddToPlaylist(musicFiles.Select(Path.GetFullPath).ToArray());
 
-
+			playlistWindow.playlistBox.SelectedItem =
+				pl.Shuffle ? playlistWindow.playlistBox.Items[pl.CurrPlaylingShuff] : playlistWindow.playlistBox.Items[pl.CurrPlaying];
 
 			_pLactive = true;
 			playlistWindow.Show();
@@ -382,13 +403,13 @@ namespace PB_069_MusicPlayer
 		}
 
 
-		private void repeatPlaylist(object sender, RoutedEventArgs e)
+		private void RepeatPlaylist(object sender, RoutedEventArgs e)
 		{
 			
 			pl.SetRepeat(RepeatPlaylistCheckBox.IsChecked != null && RepeatPlaylistCheckBox.IsChecked.Value);
 		}
 
-		private void repeatCheckBox(object sender, RoutedEventArgs e)
+		public void repeatCheckBox(object sender, RoutedEventArgs e)
 		{
 			pl.RepeatSong = RepeatCheckBox.IsChecked.Value;
 		}
@@ -399,13 +420,14 @@ namespace PB_069_MusicPlayer
 			timeLabel.Content = TimeSpan.FromSeconds(pl.Time).ToString(@"mm\:ss");
 			if(!setPos)
 			progressTracker.Value = pl.Progress;
-			Console.WriteLine(pl.Progress);
+			
 		}
 
 		private void progressTracker_MouseUp(object sender, MouseButtonEventArgs e)
 		{
-			setPos = true;
 			Console.WriteLine(progressTracker.Value + " mouse up");
+			setPos = true;
+			
 			pl.SetPosition(progressTracker.Value);
 
 			
@@ -413,11 +435,6 @@ namespace PB_069_MusicPlayer
 
 		}
 
-		
-
-		
-
-		
 
 		private void shuffleCheckBox_OnChanged(object sender, RoutedEventArgs e)
 		{
@@ -430,6 +447,23 @@ namespace PB_069_MusicPlayer
 		private void Button_Click_1(object sender, RoutedEventArgs e)
 		{
 			WindowState = WindowState.Minimized;
+		}
+
+
+		private void SaveBtn_Click(object sender, RoutedEventArgs e)
+		{
+			var openFileD = new SaveFileDialog
+			{
+				Filter = "PlaylistFiles (.m3u)|*.m3u|All Files (*.*)|*.*",
+				FilterIndex = 1
+
+			};
+			openFileD.ShowDialog();
+			if (string.IsNullOrEmpty(openFileD.FileName))
+			{
+				return;
+			}
+			pl.SavePlaylist(openFileD.FileName);
 		}
 	}
 	

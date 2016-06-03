@@ -13,7 +13,7 @@
 		<Image x:Key="Next" Source="/images/Next.png"/>
 		<Image x:Key="Prev" Source="/images/prevt.png"/>
 
-		
+
 
 		<Style TargetType="Button" >
 			<Setter Property="Background" Value="#737373"/>
@@ -150,15 +150,15 @@
 
 
 		<Button x:Name="EQBtn"
-				Content="EQ" HorizontalAlignment="Left" Margin="340,16,0,0" VerticalAlignment="Top" Width="25" RenderTransformOrigin="3.539,1.244" Height="20" Grid.Row="1" Click="EQBtn_Click"
+				Content="EQ" HorizontalAlignment="Left" Margin="340,16,0,0" VerticalAlignment="Top" RenderTransformOrigin="3.539,1.244"  Grid.Row="1" Click="EQBtn_Click"
 				/>
 
 		<Button x:Name="PlaylistBtn"
-				Content="Playlist" HorizontalAlignment="Left" Margin="290,16,0,0" VerticalAlignment="Top" Width="45" Click="PlaylistBtn_Click" Height="20" Grid.Row="1"/>
+				Content="Playlist" HorizontalAlignment="Left" Margin="292,16,0,0" VerticalAlignment="Top"  Click="PlaylistBtn_Click"  Grid.Row="1"/>
 
 		<Slider x:Name="progressTracker"
 				HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="365" Height="18" Grid.Row="2"  MouseUp="progressTracker_MouseUp" Maximum="1" IsMoveToPointEnabled="True" RenderTransformOrigin="0.5,-0.081" Delay="0"  />
-	
+
 
 
 		<Slider x:Name="volumeTracker"
@@ -170,10 +170,10 @@
 		<Label x:Name="timeLabel"
 			   Content="00:00" Margin="156,3,0,0" VerticalAlignment="Top" Width="95" Height="35" FontSize="20" HorizontalAlignment="Left" Foreground="#FFACACAC" Grid.Row="1"/>
 
-		
+
 		<Button  Content="x" Click="Button_Click" Margin="364,0,0,0" />
 		<Button  Content="_" Margin="343,0,20,0" Height="22" VerticalAlignment="Top" Click="Button_Click_1" />
-		
+
 
 		<CheckBox x:Name="ShuffleCheckBox" Checked="shuffleCheckBox_OnChanged" Unchecked="shuffleCheckBox_OnChanged"
 				  Content="Shuffle" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
@@ -198,8 +198,10 @@
 				</Button.ContextMenu>
 			</Button>
 		</Grid>
-		<CheckBox x:Name="RepeatPlaylistCheckBox" Checked="repeatPlaylist" Unchecked="repeatPlaylist"
+		<CheckBox x:Name="RepeatPlaylistCheckBox" Checked="RepeatPlaylist" Unchecked="RepeatPlaylist"
 			Content="Repeat Playlist" HorizontalAlignment="Left" Margin="10,29,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White"/>
+		<Button x:Name="SaveBtn"
+			Content="Save" HorizontalAlignment="Left" Margin="54,0,0,0" VerticalAlignment="Top"  Click="SaveBtn_Click"  Grid.Row="4"/>
 
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -81,7 +82,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		private bool songChange;
 		private bool plChanged;
-		
+
+		private bool emptyPlaylist;
 		private bool paused;
 		private bool _shuffle;
 
@@ -128,11 +130,12 @@ namespace PB_069_MusicPlayer.MusicPlayer
 			RepeatSong = reapeatSong;
 			SetRepeat(repeatPlaylist);
 			Volume =  0.25f;
+			emptyPlaylist = CurrPlaylist.SongList.Count == 0;
+			emptyPlaylist = true;
 
 
 
 
-			
 		}
 		#endregion
 
@@ -142,10 +145,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void Play()
 		{
-			while (true )
+			while (!emptyPlaylist )
 			{
 				while (CurrPlaying < CurrPlaylist.SongList.Count )
 				{
+					
 					CurrSong = Shuffle ? CurrPlaylist.SongList[shuffleArr[CurrPlaying] ] : CurrPlaylist.SongList[CurrPlaying];
 					
 
@@ -272,7 +276,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void ChangeSong(int song)
 		{
-			if(song<0)return;;
+			if (song < 0) song = -1;
+			
 			CurrPlaying = song;
 			songChange = true;
 		}
@@ -326,7 +331,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 				CurrSong = CurrPlaylist.SongList[CurrPlaying];
 			}
 
-
+			emptyPlaylist = false;
 			initialized = true;
 			return ParseForListView(CurrPlaylist.SongList);
 		}
@@ -336,6 +341,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		{
 			if(playlist!=null)
 				ListOfPlaylists.Add(playlist);
+			emptyPlaylist = false;
 		}
 
 		public List<string> AddPlaylist(string path)
@@ -353,7 +359,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 				Pause();
 				CurrPlaying--;
 			}
-			
+			emptyPlaylist = false;
 			initialized = true;
 			return ParseForListView(CurrPlaylist.SongList);
 
@@ -414,7 +420,19 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		#endregion
 
-		
+		public List<string> DeleteSongsFromPlaylist(List<int> indices  )
+		{
+			foreach (var index in indices)
+			{
+				if(index<CurrPlaylist.SongList.Count)
+					CurrPlaylist.SongList.RemoveAt(index);
+			}
+			if (CurrPlaylist.SongList.Count == 0)
+			{
+				emptyPlaylist = true;
+			}
+			return ParseForListView(CurrPlaylist.SongList);
+		}
 
 		
 
@@ -428,7 +446,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		}
 
-		
+
+		public void SavePlaylist(string path)
+		{
+			M3UParser.Save(CurrPlaylist.SongList,path);
+		}
 	}
 
 	#region events
