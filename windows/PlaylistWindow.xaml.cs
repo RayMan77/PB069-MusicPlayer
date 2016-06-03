@@ -28,13 +28,14 @@ namespace PB_069_MusicPlayer
 		{
 			InitializeComponent();
 			this.pl = pl;
+			
 		}
 
 		private void listBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (playlistBox.SelectedItems.Count <= 0) return;
+			
 			if (!pl.IsInitialized()) return;
-
+			
 			pl.ChangeSong(playlistBox.SelectedIndex-1);
 		}
 
@@ -47,6 +48,34 @@ namespace PB_069_MusicPlayer
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			playlistBox.Height = this.Height - 25;
+		}
+
+		private void Window_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (!pl.IsInitialized()) return;
+			if (e.Key == Key.Delete)
+			{
+				var selectedItemIndexes = new List<int>();
+				foreach (var o in playlistBox.SelectedItems)
+					selectedItemIndexes.Add(playlistBox.Items.IndexOf(o));
+
+				playlistBox.ItemsSource = pl.DeleteSongsFromPlaylist(selectedItemIndexes);
+
+
+				int curpl = pl.CurrPlaying;
+				while (curpl >= playlistBox.Items.Count)
+				{
+					curpl--;
+				}
+				
+					playlistBox.SelectedItem =
+				pl.Shuffle ? playlistBox.Items[pl.CurrPlaylingShuff] : playlistBox.Items[curpl ];
+				
+				
+				
+
+				e.Handled = true;
+			}
 		}
 	}
 }
