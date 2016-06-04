@@ -5,176 +5,42 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:PB_069_MusicPlayer"
 		mc:Ignorable="d"
-		Title="EqualizerWindow" Height="210" Width="300" WindowStyle="None" Background="#FF383837" ResizeMode="NoResize"
+		Title="EqualizerWindow" Height="210" Width="275" WindowStyle="None" Background="#FF383837" ResizeMode="NoResize"
 		ShowInTaskbar="False" 
 		Loaded="Window_Loaded" >
-	<Grid Margin="0,0,0,-5">
+	<Grid Margin="0,0,0,0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="0*"/>
-			<RowDefinition Height="163*"/>
-			<RowDefinition Height="44*"/>
+			<RowDefinition Height="160*"/>
+			<RowDefinition Height="50*"/>
 		</Grid.RowDefinitions>
-		<Slider x:Name="slider" HorizontalAlignment="Left" Margin="-49,77,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Height="18" Grid.Row="1">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy" HorizontalAlignment="Left" Margin="-13,77,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy1" HorizontalAlignment="Left" Margin="-31,77,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy2" HorizontalAlignment="Left" Margin="23,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy3" HorizontalAlignment="Left" Margin="41,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy4" HorizontalAlignment="Left" Margin="59,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy5" HorizontalAlignment="Left" Margin="5,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy6" HorizontalAlignment="Left" Margin="76,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy7" HorizontalAlignment="Left" Margin="94,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy8" HorizontalAlignment="Left" Margin="112,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy9" HorizontalAlignment="Left" Margin="130,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy10" HorizontalAlignment="Left" Margin="148,78,0,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy11" HorizontalAlignment="Left" Margin="25,12,0,0" VerticalAlignment="Top" Width="167" RenderTransformOrigin="0.5,0.5" Grid.Row="2" Height="18" Value="5">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="180"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy12" HorizontalAlignment="Left" Margin="165,78,-12,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy13" HorizontalAlignment="Left" Margin="182,78,-29,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<Slider x:Name="slider_Copy14" HorizontalAlignment="Left" Margin="200,78,-47,0" VerticalAlignment="Top" Width="139" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Height="18">
-			<Slider.RenderTransform>
-				<TransformGroup>
-					<ScaleTransform/>
-					<SkewTransform/>
-					<RotateTransform Angle="90"/>
-					<TranslateTransform/>
-				</TransformGroup>
-			</Slider.RenderTransform>
-		</Slider>
-		<CheckBox x:Name="EqOnOff" Content="On/Off" HorizontalAlignment="Left" Margin="207,10,0,0" Grid.Row="2" VerticalAlignment="Top" IsChecked="False" Foreground="#FFA4A4A4"/>
+
+		<Slider x:Name="slider" HorizontalAlignment="Left" Margin="15,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="0"/>
+
+		<Slider x:Name="slider1" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="1"/>
+
+		<Slider x:Name="slider2" HorizontalAlignment="Left" Margin="65,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="2"/>
+
+		<Slider x:Name="slider3" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="3"/>
+
+		<Slider x:Name="slider4" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="4"/>
+
+		<Slider x:Name="slider5" HorizontalAlignment="Left" Margin="140,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="5"/>
+
+		<Slider x:Name="slider6" HorizontalAlignment="Left" Margin="165,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="6"/>
+
+		<Slider x:Name="slider7" HorizontalAlignment="Left" Margin="190,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="7"/>
+
+		<Slider x:Name="slider8" HorizontalAlignment="Left" Margin="215,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="8"/>
+
+		<Slider x:Name="slider9" HorizontalAlignment="Left" Margin="240,10,0,0" VerticalAlignment="Top" Width="20" Height="140" Grid.Row="1" ValueChanged="slider_ValueChanged" Maximum="100" Minimum="-100" Orientation="Vertical" Delay="0" Tag="9"/>
+
+
+
+
+
+		<Slider x:Name="balanceSlider" HorizontalAlignment="Left" Margin="25,12,0,0" VerticalAlignment="Top" Width="167" RenderTransformOrigin="0.5,0.5" Grid.Row="2" Height="18" Value="5"/>
+		<CheckBox x:Name="eqOnCheckbox" Content="On/Off" HorizontalAlignment="Left" Margin="203,12,0,0" Grid.Row="2" VerticalAlignment="Top" IsChecked="False" Foreground="#FFA4A4A4" Height="15" Width="57" Unchecked="eqOnCheckbox_Onchange" Checked="eqOnCheckbox_Onchange"/>
 
 	</Grid>
 </Window>

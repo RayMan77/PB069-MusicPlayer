@@ -67,7 +67,8 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		#endregion
 
 
-
+		public const double maxDb = 20 ;
+		public double MaxDb => maxDb;
 		private List<Playlist> ListOfPlaylists;
 
 		public int CurrPlaying { get;private set; }
@@ -94,6 +95,15 @@ namespace PB_069_MusicPlayer.MusicPlayer
 		public float Volume { get; set; }
 		public double Progress { get; set; }
 		private Equalizer equalizer;
+
+		public Equalizer Equalizer
+		{
+			get
+			{
+				return equalizer;
+			}
+			private set { equalizer = value; }
+		}
 
 
 		public int CurrPlaylingShuff
@@ -154,15 +164,18 @@ namespace PB_069_MusicPlayer.MusicPlayer
 					
 
 
-					OnSongChangedHandler?.Invoke(this, new OnSongChanged(CurrSong.SongName));
+					
 
-					using (soundSource = CodecFactory.Instance.GetCodec(CurrSong.SongPath))
+					
+					using (soundSource = CodecFactory.Instance.GetCodec(CurrSong.SongPath)
+						.ChangeSampleRate(32000)
+						.AppendSource(Equalizer.Create10BandEqualizer, out equalizer).ToWaveSource())
 					{
 						using (soundOut = GetSoundOut())
 						{
 							soundOut.Initialize(soundSource);
 							soundOut.Play();
-							equalizer = new Equalizer(soundSource);
+							OnSongChangedHandler?.Invoke(this, new OnSongChanged(CurrSong.SongName));
 
 
 
@@ -173,11 +186,11 @@ namespace PB_069_MusicPlayer.MusicPlayer
 							}
 
 
-							
+
 
 							while (soundOut.PlaybackState == PlaybackState.Playing || soundOut.PlaybackState == PlaybackState.Paused)
 							{
-								
+
 
 								if (songChange)
 								{
@@ -190,14 +203,18 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 									break;
 								}
-								Time = (int) (soundSource.Position/soundSource.WaveFormat.BytesPerSecond);
-								Progress = (double)soundSource.Position/soundSource.Length;
-								soundOut.Volume = Volume;
-
+								if (initialized)
+								{
+									Time = (int)(soundSource.Position / soundSource.WaveFormat.BytesPerSecond);
+									Progress = (double)soundSource.Position / soundSource.Length;
+									soundOut.Volume = Volume;
+								}
 								
 
-								
-								
+
+
+
+
 								Thread.Sleep(1);
 							}
 
@@ -413,6 +430,7 @@ namespace PB_069_MusicPlayer.MusicPlayer
 
 		public void Dispose()
 		{
+			initialized = false;
 			soundSource.Dispose();
 			soundOut.Dispose();
 		}

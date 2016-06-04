@@ -40,7 +40,7 @@ namespace PB_069_MusicPlayer
 			thread = new Thread(pl.Play);
 			
 			
-			equalizerWindow = new EqualizerWindow();
+			equalizerWindow = new EqualizerWindow(pl);
 			playlistWindow = new PlaylistWindow(pl);
 			
 
