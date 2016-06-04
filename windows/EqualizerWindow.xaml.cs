@@ -93,7 +93,7 @@ namespace PB_069_MusicPlayer
 		{
 			Dispatcher.Invoke(() =>
 			{
-
+				if (!eqOnCheckbox.IsChecked.Value) return;
 				changeEQ();
 			});
 
